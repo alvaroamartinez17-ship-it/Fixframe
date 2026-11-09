@@ -12,8 +12,9 @@ GitHub Pages site to load itself and to check for updates.
 ## Put it on GitHub Pages
 
 1. Create a new repository on GitHub, for example `fixframe` (public, or private with Pages enabled on your plan).
-2. Upload **all files of this folder** to the repository root: `index.html`, `sw.js`, `manifest.webmanifest`,
-   `sample.mp4`, `.nojekyll`, `README.md` and the `icons` folder.
+2. Upload **all files of this folder** to the repository root. There are no sub-folders: `index.html`, `sw.js`,
+   `manifest.webmanifest`, `sample.mp4`, `step-bg.jpg`, the five icon `.png` files, `.nojekyll` and `README.md`.
+   (If you used version 1.0, you can delete the old `icons` folder from the repository.)
 3. In the repository: **Settings → Pages → Build and deployment → Deploy from a branch**, branch `main`, folder `/ (root)`, Save.
 4. After a minute the app is live at `https://<your-user>.github.io/fixframe/`.
 
@@ -28,11 +29,19 @@ After the first start the app also works offline.
 ## Releasing an update
 
 1. Change the version in **two places** and keep them identical:
-   - `index.html`: `const APP_VERSION = '1.0.0';`
-   - `sw.js`: `const VERSION = '1.0.0';`
+   - `index.html`: `const APP_VERSION = '1.1.0';`
+   - `sw.js`: `const VERSION = '1.1.0';`
 2. Upload the changed files to the repository.
 3. In the app: **Settings (sliders icon) → Check for updates → Install update**. The app also checks a few
    seconds after it starts and shows an *Update ready* banner. Guides are kept during updates.
+
+## Brand & safety (Settings → Open brand settings)
+
+- **Logo watermark:** load your logo (PNG with transparent background works best); choose corner, size and opacity.
+- **Background picture for cards:** the title, safety and step cards use `step-bg.jpg`, shown grey and darkened.
+  Load your own picture in the app, or replace `step-bg.jpg` in the repository to change the standard one.
+- **Brand intro video, safety instructions (text and/or video), closing video:** stored once, used in every guide.
+  Each part can be switched on or off on the export screen.
 
 ## Reset
 

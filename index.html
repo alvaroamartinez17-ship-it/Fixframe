@@ -5,50 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Fixframe Repair Guides</title>
 <meta name="description" content="Turn a repair video into a step-by-step guide. Everything stays on your phone.">
-<meta name="theme-color" content="#0B100F">
+<meta name="theme-color" content="#100E0D">
 <meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Fixframe">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/favicon-64.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon-64.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 img{max-width:100%}[hidden]{display:none!important}
 /* Layout: one-column phone workbench. Sticky player + timeline on top, steps scroll below;
    picture markup and export open as full-screen sheets. Deliberately one dark look so footage reads true. */
 :root {
-  --bg: #0B100F;
-  --panel: #121917;
-  --panel-2: #18211E;
-  --panel-3: #22302B;
-  --hair: #22302B;
-  --hair-2: #33433D;
-  --ink: #ECF2EF;
-  --ink-2: #A3B2AC;
-  --ink-3: #6E7E78;
-  --marker: #FFCF33;
-  --marker-press: #F2BC12;
-  --marker-ink: #1C1602;
-  --marker-soft: rgba(255, 207, 51, 0.14);
-  --marker-line: rgba(255, 207, 51, 0.45);
-  --mat: #2E8B6E;
-  --mat-deep: #1D5847;
-  --mat-grid: rgba(150, 230, 200, 0.06);
-  --caution: #FF9C3D;
-  --caution-soft: rgba(255, 156, 61, 0.12);
+  --bg: #100E0D;
+  --panel: #191614;
+  --panel-2: #211D1A;
+  --panel-3: #2E2824;
+  --hair: #2E2824;
+  --hair-2: #453C36;
+  --ink: #F4EFEB;
+  --ink-2: #B5ABA3;
+  --ink-3: #7F756D;
+  --marker: #E75B12;
+  --marker-press: #C94C0B;
+  --marker-ink: #160800;
+  --marker-soft: rgba(231, 91, 18, 0.16);
+  --marker-line: rgba(231, 91, 18, 0.55);
+  --mat: #8C8279;
+  --mat-deep: #3A322D;
+  --mat-grid: rgba(255, 225, 205, 0.05);
+  --caution: #FFC83D;
+  --caution-soft: rgba(255, 200, 61, 0.12);
   --danger: #FF5C50;
   --danger-soft: rgba(255, 92, 80, 0.13);
   --ok: #4BD49B;
   --video: #000000;
   --white: #FFFFFF;
-  --scrim: rgba(4, 7, 6, 0.68);
-  --toast-bg: #EEF4F1;
-  --toast-ink: #0B100F;
-  --gap-stripe-a: rgba(4, 7, 6, 0.80);
-  --gap-stripe-b: rgba(4, 7, 6, 0.58);
+  --scrim: rgba(6, 5, 4, 0.7);
+  --toast-bg: #F4EFEB;
+  --toast-ink: #100E0D;
+  --gap-stripe-a: rgba(6, 5, 4, 0.80);
+  --gap-stripe-b: rgba(6, 5, 4, 0.58);
 
   --f-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --f-display: "Avenir Next Condensed", "Roboto Condensed", "sans-serif-condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
@@ -315,12 +315,12 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 /* ---------- sheets / dialogs ---------- */
 #modal-root { position: relative; z-index: 60; }
 .modal-back {
-  position: fixed; inset: 0; background: var(--scrim); display: flex; align-items: flex-end; justify-content: center;
+  position: fixed; left: 0; right: 0; top: var(--vv-top, 0px); height: var(--vv-h, 100%); background: var(--scrim); display: flex; align-items: flex-end; justify-content: center;
   opacity: 0; transition: opacity 0.18s; padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
 }
 .modal-back.in { opacity: 1; }
 .sheet {
-  width: 100%; max-width: 560px; max-height: 88vh; overflow-y: auto; background: var(--panel);
+  width: 100%; max-width: 560px; max-height: min(88vh, calc(var(--vv-h, 100vh) - 8px)); overflow-y: auto; background: var(--panel);
   border: 1px solid var(--hair-2); border-bottom: 0; border-radius: 20px 20px 0 0;
   padding: 8px 18px calc(18px + env(safe-area-inset-bottom, 0px));
   transform: translateY(24px); transition: transform 0.2s ease;
@@ -340,6 +340,18 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
   .modal-back { align-items: center; }
   .sheet { border-radius: 20px; border-bottom: 1px solid var(--hair-2); }
 }
+.modal-back.top { align-items: flex-start; }
+.modal-back.top .sheet {
+  border-radius: 0 0 20px 20px; border: 1px solid var(--hair-2); border-top: 0;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 18px 16px; transform: translateY(-24px);
+}
+.modal-back.top.in .sheet { transform: none; }
+.modal-back.top .sheet-grip { display: none; }
+.brand-thumb { width: 96px; height: 60px; flex: none; border-radius: 8px; border: 1px solid var(--hair-2); background: var(--panel-3) center / contain no-repeat; }
+.brand-thumb.cover { background-size: cover; }
+.set-row.wrap { flex-wrap: wrap; justify-content: flex-start; }
+.set-section textarea { width: 100%; min-height: 84px; background: var(--panel-2); border: 1px solid var(--hair-2); border-radius: 10px; padding: 10px 12px; font-size: 16px; color: var(--ink); resize: vertical; }
+.set-section textarea:focus { outline: none; border-color: var(--marker); box-shadow: 0 0 0 3px var(--marker-soft); }
 .set-section { display: grid; gap: 8px; padding: 14px 0; border-top: 1px solid var(--hair); }
 .set-section:first-of-type { border-top: 0; padding-top: 0; }
 .set-section h4 { margin: 0; font: 700 12px/1 var(--f-display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
@@ -366,7 +378,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 
 /* ---------- full-screen overlays ---------- */
 .overlay {
-  position: fixed; inset: 0; z-index: 40; background: var(--bg); display: flex; flex-direction: column;
+  position: fixed; left: 0; right: 0; top: var(--vv-top, 0px); height: var(--vv-h, 100%); z-index: 40; background: var(--bg); display: flex; flex-direction: column;
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
 .overlay > .topbar { padding-left: 12px; padding-right: 12px; }
@@ -588,6 +600,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
   <div class="ex-body" id="ex-body">
     <div class="fmt-grid" id="fmt-grid" role="radiogroup" aria-label="Format"></div>
     <div class="ex-opts" id="ex-opts"></div>
+    <button class="btn small ghost" id="ex-brand" type="button">Brand, logo &amp; safety settings</button>
     <p class="ex-summary" id="ex-summary"></p>
     <button class="btn primary big" id="ex-go"></button>
   </div>
@@ -616,7 +629,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 <script>
 'use strict';
 /* Fixframe — turn a repair video into a step-by-step guide. Everything runs on this device. */
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 const IS_FRAMED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
 const UA = navigator.userAgent || '';
 const IS_IOS = /iP(hone|ad|od)/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -774,8 +787,8 @@ function closeImage(img) { try { if (img && img.close) img.close(); } catch (e) 
 
 /* ---------- sheets, dialogs, toasts ---------- */
 const Modal = {
-  open(content, { onClose, dismissable = true } = {}) {
-    const back = h('div', { class: 'modal-back' });
+  open(content, { onClose, dismissable = true, top = false } = {}) {
+    const back = h('div', { class: 'modal-back' + (top ? ' top' : '') });
     const sheet = h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true' }, h('div', { class: 'sheet-grip', 'aria-hidden': 'true' }), content);
     back.append(sheet);
     $('#modal-root').append(back);
@@ -826,7 +839,7 @@ function askText({ title, value = '', placeholder = '', multiline = false, ok = 
       h('div', { class: 'dlg-actions' },
         h('button', { type: 'button', class: 'btn', onClick: () => m.close(null) }, 'Cancel'),
         h('button', { type: 'submit', class: 'btn primary' }, ok)));
-    m = Modal.open(body, { onClose: (v) => resolve(v == null ? null : String(v)) });
+    m = Modal.open(body, { top: true, onClose: (v) => resolve(v == null ? null : String(v)) });
     try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
     try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) { /* ignore */ }
   });
@@ -867,6 +880,27 @@ const Nav = {
     if (top) top.onBack();
   },
 };
+
+function pickFile(accept) {
+  return new Promise((resolve) => {
+    const input = h('input', { type: 'file', accept, hidden: true });
+    document.body.append(input);
+    input.addEventListener('change', () => { const f = input.files && input.files[0]; input.remove(); resolve(f || null); });
+    input.click();
+  });
+}
+/* Keep sheets and full-screen editors inside the visible area when the on-screen keyboard is open. */
+function fitViewport() {
+  const vv = window.visualViewport;
+  const st = document.documentElement.style;
+  if (!vv || Math.abs(vv.scale - 1) > 0.01 || window.innerHeight - vv.height < 80) {
+    st.removeProperty('--vv-h');
+    st.removeProperty('--vv-top');
+    return;
+  }
+  st.setProperty('--vv-h', `${vv.height}px`);
+  st.setProperty('--vv-top', `${vv.offsetTop}px`);
+}
 
 const ICONS = (() => {
   const s = (inner) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${inner}</svg>`;
@@ -1172,9 +1206,184 @@ async function makeThumbs(url, duration, onThumb, isCancelled) {
   } finally { disposeVideo(v); }
 }
 
+/* Brand kit, shared by all guides and stored on the device:
+   logo watermark, card background picture, brand intro, safety instructions, closing video. */
+const BG_DARK = [0, 0.55, 0.38, 0.24];
+const Brand = {
+  cfg: { wmPos: 'tl', wmSize: 2, wmOpacity: 0.85, bgDark: 2, safetyText: '', clips: {} },
+  logo: null, logoUrl: '', bgSrc: null, bg: null, bgUrl: '', bgCustom: false, urls: {},
+  async load() {
+    try {
+      const c = await Store.getBlob('cfg:brand');
+      if (c && typeof c === 'object' && !(c instanceof Blob)) Object.assign(this.cfg, c);
+    } catch (e) { /* defaults */ }
+    if (!this.cfg.clips) this.cfg.clips = {};
+    try { const b = await Store.getBlob('b:logo'); if (b) await this.useLogo(b); } catch (e) { /* no logo */ }
+    await this.loadBg();
+  },
+  async loadBg() {
+    try {
+      let b = await Store.getBlob('b:bg');
+      this.bgCustom = !!b;
+      if (!b) b = await this.defaultBg();
+      if (b) await this.useBg(b); else { this.bg = null; this.bgSrc = null; this.bgUrl = ''; }
+    } catch (e) { this.bg = null; }
+  },
+  async defaultBg() {
+    // Standard background shipped with the app (step-bg.jpg next to index.html), if present.
+    try {
+      const r = await fetch('step-bg.jpg');
+      if (!r.ok) return null;
+      const b = await r.blob();
+      return /^image\//.test(b.type) && b.size > 500 ? b : null;
+    } catch (e) { return null; }
+  },
+  save() { return Store.putBlob('cfg:brand', this.cfg).catch(() => {}); },
+  has(k) {
+    if (k === 'logo') return !!this.logo;
+    if (k === 'safetyText') return lines(this.cfg.safetyText).length > 0;
+    if (k === 'safety') return this.has('safetyText') || !!this.cfg.clips.safetyVideo;
+    return !!this.cfg.clips[k];
+  },
+  async useLogo(blob) {
+    const img = await loadImageFromBlob(blob);
+    if (!img.width || !img.height) throw new Error('This picture cannot be read.');
+    closeImage(this.logo);
+    this.logo = img;
+    const k = Math.min(1, 240 / Math.max(img.width, img.height));
+    const c = makeCanvas(img.width * k, img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    this.logoUrl = c.toDataURL('image/png');
+    freeCanvas(c);
+  },
+  async setLogo(file) { await this.useLogo(file); await Store.putBlob('b:logo', file); },
+  async clearLogo() { await Store.delBlobs(['b:logo']); closeImage(this.logo); this.logo = null; this.logoUrl = ''; },
+  async useBg(blob) {
+    const img = await loadImageFromBlob(blob);
+    if (!img.width || !img.height) throw new Error('This picture cannot be read.');
+    const k = Math.min(1, 1280 / Math.max(img.width, img.height));
+    freeCanvas(this.bgSrc);
+    this.bgSrc = makeCanvas(img.width * k, img.height * k);
+    this.bgSrc.getContext('2d').drawImage(img, 0, 0, this.bgSrc.width, this.bgSrc.height);
+    closeImage(img);
+    this.processBg();
+  },
+  processBg() {
+    // Grey + darkened copy, done per pixel because canvas filters are missing in older Safari.
+    const src = this.bgSrc;
+    if (!src) return;
+    const c = makeCanvas(src.width, src.height);
+    const ctx = c.getContext('2d');
+    ctx.drawImage(src, 0, 0);
+    const im = ctx.getImageData(0, 0, c.width, c.height);
+    const d = im.data;
+    const k = BG_DARK[this.cfg.bgDark || 2];
+    for (let i = 0; i < d.length; i += 4) {
+      const g = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) * k;
+      d[i] = g; d[i + 1] = g; d[i + 2] = g;
+    }
+    ctx.putImageData(im, 0, 0);
+    freeCanvas(this.bg);
+    this.bg = c;
+    const t = makeCanvas(192, 192 * (c.height / c.width));
+    t.getContext('2d').drawImage(c, 0, 0, t.width, t.height);
+    this.bgUrl = t.toDataURL('image/jpeg', 0.8);
+    freeCanvas(t);
+  },
+  async setBg(file) { await this.useBg(file); await Store.putBlob('b:bg', file); this.bgCustom = true; },
+  async clearBg() { await Store.delBlobs(['b:bg']); await this.loadBg(); },
+  async setClip(slot, file) {
+    const url = URL.createObjectURL(file);
+    let meta;
+    try { meta = await probeVideo(url); } catch (e) {
+      URL.revokeObjectURL(url);
+      const err = new Error('unplayable');
+      err.userMsg = 'This video cannot be played in this browser. MP4 or MOV works best.';
+      throw err;
+    }
+    try { await Store.putBlob('b:clip:' + slot, file); } catch (e) { URL.revokeObjectURL(url); throw e; }
+    if (this.urls[slot]) URL.revokeObjectURL(this.urls[slot]);
+    this.urls[slot] = url;
+    this.cfg.clips[slot] = { name: file.name || 'video', size: file.size, duration: meta.duration, width: meta.width, height: meta.height };
+    await this.save();
+  },
+  async clearClip(slot) {
+    await Store.delBlobs(['b:clip:' + slot]);
+    if (this.urls[slot]) URL.revokeObjectURL(this.urls[slot]);
+    delete this.urls[slot];
+    delete this.cfg.clips[slot];
+    await this.save();
+  },
+  async prepareClips() {
+    for (const slot of Object.keys(this.cfg.clips)) {
+      if (this.urls[slot]) continue;
+      const b = await Store.getBlob('b:clip:' + slot).catch(() => null);
+      if (b) this.urls[slot] = URL.createObjectURL(b);
+      else { delete this.cfg.clips[slot]; this.save(); }
+    }
+  },
+};
+
+function openBrandSettings(onClose) {
+  const body = h('div', { class: 'dlg' });
+  const saveText = debounce(() => Brand.save(), 500);
+  const btn = (label, fn, cls) => h('button', { type: 'button', class: 'btn small' + (cls ? ' ' + cls : ''), onClick: fn }, label);
+  const act = async (fn, okMsg) => {
+    const b = busy('Saving…');
+    try { await fn(); b.close(); if (okMsg) toast(okMsg, '', 1800); }
+    catch (e) { b.close(); toast(e && e.userMsg ? e.userMsg : (e && e.message && !/quota/i.test(e.message) && e.name !== 'QuotaExceededError' ? e.message : storageErrorText(e)), 'err', 6000); }
+    draw();
+  };
+  const seg = (label, options, cur, set) => h('div', { class: 'set-row' }, h('span', null, label),
+    h('div', { class: 'seg', role: 'group', 'aria-label': label }, options.map(([v, l]) => h('button', {
+      type: 'button', 'aria-pressed': String(cur === v), onClick: () => { set(v); Brand.save(); draw(); },
+    }, l))));
+  const clip = (slot, title, hint) => {
+    const c = Brand.cfg.clips[slot];
+    return h('div', { class: 'set-section' }, h('h4', null, title),
+      h('p', null, c ? `${c.name} · ${fmtDur(c.duration)} · ${fmtBytes(c.size)}` : hint),
+      h('div', { class: 'set-row wrap' },
+        btn(c ? 'Replace video' : 'Choose video', async () => { const f = await pickFile('video/*'); if (f) act(() => Brand.setClip(slot, f), 'Video saved'); }),
+        c ? btn('Remove', () => act(() => Brand.clearClip(slot)), 'danger-ghost') : null));
+  };
+  const safety = h('textarea', { id: 'brand-safety', rows: '4', placeholder: 'One instruction per line, e.g.\nUnplug the machine\nWear safety glasses' });
+  safety.addEventListener('input', () => { Brand.cfg.safetyText = safety.value; saveText(); });
+  function draw() {
+    safety.value = Brand.cfg.safetyText || '';
+    body.replaceChildren(
+      h('h3', { class: 'dlg-title' }, 'Brand & safety'),
+      h('p', { class: 'dlg-msg' }, 'Used in every guide and stored only on this phone. Switch each part on or off when you export.'),
+      h('div', { class: 'set-section' }, h('h4', null, 'Logo watermark'),
+        h('div', { class: 'set-row wrap' },
+          h('span', { class: 'brand-thumb', style: { backgroundImage: Brand.logoUrl ? `url("${Brand.logoUrl}")` : '' } }),
+          btn(Brand.logo ? 'Replace logo' : 'Choose logo', async () => { const f = await pickFile('image/*'); if (f) act(() => Brand.setLogo(f), 'Logo saved'); }),
+          Brand.logo ? btn('Remove', () => act(() => Brand.clearLogo()), 'danger-ghost') : null),
+        h('p', null, 'A PNG with a transparent background looks best. Shown on step clips, pictures and cards.'),
+        seg('Position', [['tl', '↖'], ['tr', '↗'], ['bl', '↙'], ['br', '↘']], Brand.cfg.wmPos, (v) => { Brand.cfg.wmPos = v; }),
+        seg('Size', [[1, 'S'], [2, 'M'], [3, 'L']], Brand.cfg.wmSize, (v) => { Brand.cfg.wmSize = v; }),
+        seg('Opacity', [[0.4, '40%'], [0.65, '65%'], [0.85, '85%'], [1, '100%']], Brand.cfg.wmOpacity, (v) => { Brand.cfg.wmOpacity = v; })),
+      h('div', { class: 'set-section' }, h('h4', null, 'Background picture for cards'),
+        h('div', { class: 'set-row wrap' },
+          h('span', { class: 'brand-thumb cover', style: { backgroundImage: Brand.bgUrl ? `url("${Brand.bgUrl}")` : '' } }),
+          btn(Brand.bgCustom ? 'Replace picture' : 'Choose picture', async () => { const f = await pickFile('image/*'); if (f) act(() => Brand.setBg(f), 'Background saved'); }),
+          Brand.bgCustom ? btn('Use standard', () => act(() => Brand.clearBg()), 'danger-ghost') : null),
+        h('p', null, Brand.bgCustom ? 'Your picture, turned grey and darkened, sits behind the title, safety and step cards.'
+          : (Brand.bg ? 'The standard picture is in use. Choose your own to replace it.' : 'The standard grid is in use. Choose a picture; it is turned grey and darkened automatically.')),
+        Brand.bg ? seg('Darkness', [[1, 'Light'], [2, 'Medium'], [3, 'Dark']], Brand.cfg.bgDark, (v) => { Brand.cfg.bgDark = v; Brand.processBg(); }) : null),
+      clip('intro', 'Brand intro video', 'Plays first in every exported video.'),
+      h('div', { class: 'set-section' }, h('h4', null, 'Safety instructions'),
+        h('p', null, 'Shown as a card after the title, and as a box in PDF, Word and HTML guides.'), safety),
+      clip('safetyVideo', 'Safety video', 'Optional. Plays after the safety card, before step 1.'),
+      clip('outro', 'Closing video', 'Plays last in every exported video.'),
+      h('p', { class: 'hint' }, 'Brand videos are fitted into the frame and play without sound, like the rest of the export.'));
+  }
+  draw();
+  Modal.open(body, { onClose: () => { saveText.flush(); if (onClose) onClose(); } });
+}
+
 /* Picture markup: arrows, info boxes (with optional pointer), circles, frames, numbers.
    Coordinates are stored 0..1 relative to the picture; sizes scale with the picture. */
-const ANN_COLORS = ['#FF3B30', '#FFCC00', '#FF9500', '#34C759', '#0A84FF', '#FFFFFF', '#111111'];
+const ANN_COLORS = ['#FF3B30', '#FFCC00', '#E75B12', '#34C759', '#0A84FF', '#FFFFFF', '#111111'];
 const ANN_FONT = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 const ANN_SIZE = { stroke: [0, 4.2, 7, 10.5], font: [0, 24, 32, 44], num: [0, 19, 26, 35] };
 
@@ -1409,11 +1618,11 @@ function drawSelection(ctx, s, W, H, scale, handles) {
     ctx.beginPath();
     ctx.arc(hd.x, hd.y, r, 0, Math.PI * 2);
     if (hd.ghost) {
-      ctx.fillStyle = 'rgba(255,207,51,0.28)';
+      ctx.fillStyle = 'rgba(231,91,18,0.3)';
       ctx.fill();
       ctx.setLineDash([4 * scale, 3 * scale]);
       ctx.lineWidth = 2 * scale;
-      ctx.strokeStyle = '#FFCF33';
+      ctx.strokeStyle = '#E75B12';
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.beginPath();
@@ -1424,7 +1633,7 @@ function drawSelection(ctx, s, W, H, scale, handles) {
       ctx.fillStyle = '#FFFFFF';
       ctx.fill();
       ctx.lineWidth = 2.2 * scale;
-      ctx.strokeStyle = '#0B100F';
+      ctx.strokeStyle = '#100E0D';
       ctx.stroke();
     }
   }
@@ -1465,9 +1674,9 @@ const PicThumbs = {
 const F_DISPLAY = '"Avenir Next Condensed", "Roboto Condensed", "sans-serif-condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif';
 const F_UI = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 const CARD = {
-  bg: '#0B100F', grid: 'rgba(150,230,200,0.06)', gridMajor: 'rgba(150,230,200,0.12)',
-  ink: '#ECF2EF', ink2: '#A3B2AC', ink3: '#6E7E78', marker: '#FFCF33', markerInk: '#1C1602',
-  caution: '#FF9C3D', plate: 'rgba(8,12,11,0.80)', ghost: 'rgba(255,207,51,0.07)',
+  bg: '#100E0D', grid: 'rgba(255,225,205,0.06)', gridMajor: 'rgba(255,225,205,0.12)',
+  ink: '#F4EFEB', ink2: '#B5ABA3', ink3: '#7F756D', marker: '#E75B12', markerInk: '#1A0A00',
+  caution: '#FFC83D', plate: 'rgba(8,12,11,0.80)', ghost: 'rgba(231,91,18,0.10)',
 };
 
 function setLetterSpacing(ctx, px) { if ('letterSpacing' in ctx) ctx.letterSpacing = `${px}px`; }
@@ -1514,6 +1723,18 @@ function ellipsize(ctx, text, maxW) {
 function paintCardBg(ctx, W, H) {
   ctx.fillStyle = CARD.bg;
   ctx.fillRect(0, 0, W, H);
+  if (Brand.bg) {
+    const bw = Brand.bg.width;
+    const bh = Brand.bg.height;
+    const k = Math.max(W / bw, H / bh);
+    ctx.drawImage(Brand.bg, (W - bw * k) / 2, (H - bh * k) / 2, bw * k, bh * k);
+    const g = ctx.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, 'rgba(0,0,0,0.42)');
+    g.addColorStop(1, 'rgba(0,0,0,0.12)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    return;
+  }
   const S = Math.min(W, H);
   const cell = Math.max(8, Math.round(S / 16));
   ctx.lineWidth = Math.max(1, S / 720);
@@ -1523,6 +1744,65 @@ function paintCardBg(ctx, W, H) {
     for (let x = step; x < W; x += step) { ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); }
     for (let y = step; y < H; y += step) { ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); }
     ctx.stroke();
+  }
+}
+function drawWatermark(ctx, W, H, o) {
+  const img = Brand.logo;
+  if (!img || !img.width || !img.height) return;
+  const S = Math.min(W, H);
+  const m = S * 0.04;
+  const maxW = S * [0, 0.16, 0.24, 0.34][Brand.cfg.wmSize || 2];
+  const k = Math.min(maxW / img.width, (maxW * 0.6) / img.height);
+  const w = img.width * k;
+  const hh = img.height * k;
+  const pos = Brand.cfg.wmPos || 'tl';
+  const x = pos[1] === 'l' ? m : W - m - w;
+  let y = pos[0] === 't' ? m : H - m - hh;
+  if (o && o.liftBottom && pos === 'bl') y -= S * 0.09 + m * 0.6;
+  ctx.save();
+  ctx.globalAlpha = Brand.cfg.wmOpacity || 0.85;
+  ctx.drawImage(img, x, y, w, hh);
+  ctx.restore();
+}
+function drawSafetyCard(ctx, W, H, items) {
+  paintCardBg(ctx, W, H);
+  const S = Math.min(W, H);
+  const x0 = Math.round(W * 0.08);
+  const maxW = W - x0 * 2;
+  const labelFs = S * 0.042;
+  const titleFs = S * 0.08;
+  const gap = S * 0.03;
+  const barW = S * 0.022;
+  let fs = S * 0.046;
+  let rows = [];
+  let blockH = 0;
+  for (;;) {
+    ctx.font = `500 ${fs}px ${F_UI}`;
+    rows = items.map((t) => wrapLines(ctx, t, maxW - barW * 2.6, 3));
+    blockH = labelFs + gap + titleFs * 1.05 + gap + rows.reduce((a, r) => a + r.length * fs * 1.32 + fs * 0.5, 0);
+    if (blockH <= H * 0.86 || fs <= S * 0.028) break;
+    fs *= 0.92;
+  }
+  let y = Math.max(S * 0.05, (H - blockH) / 2);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = CARD.caution;
+  ctx.font = `800 ${labelFs}px ${F_DISPLAY}`;
+  setLetterSpacing(ctx, labelFs * 0.16);
+  ctx.fillText('SAFETY FIRST', x0, y + labelFs * 0.85);
+  setLetterSpacing(ctx, 0);
+  y += labelFs + gap;
+  ctx.fillStyle = CARD.ink;
+  ctx.font = `800 ${titleFs}px ${F_DISPLAY}`;
+  ctx.fillText('Safety instructions', x0, y + titleFs * 0.84);
+  y += titleFs * 1.05 + gap;
+  const listH = rows.reduce((a, r) => a + r.length * fs * 1.32 + fs * 0.5, 0) - fs * 0.5;
+  hazardBar(ctx, x0, y, barW, listH);
+  ctx.fillStyle = CARD.ink;
+  ctx.font = `500 ${fs}px ${F_UI}`;
+  for (const r of rows) {
+    r.forEach((ln, i) => ctx.fillText(ln, x0 + barW * 2.6, y + fs * 0.95 + i * fs * 1.32));
+    y += r.length * fs * 1.32 + fs * 0.5;
   }
 }
 function drawMark(ctx, x, y, size) {
@@ -1665,7 +1945,7 @@ function drawStepCard(ctx, W, H, seg, info) {
     for (const ln of cl) tw = Math.max(tw, ctx.measureText(ln).width);
     const panelW = Math.min(maxW, barW * 2.4 + tw + cauFs * 0.9);
     roundRectPath(ctx, x0, y, panelW, panelH, cauFs * 0.3);
-    ctx.fillStyle = 'rgba(255,156,61,0.14)';
+    ctx.fillStyle = 'rgba(255,200,61,0.14)';
     ctx.fill();
     ctx.save();
     roundRectPath(ctx, x0, y, panelW, panelH, cauFs * 0.3);
@@ -1708,7 +1988,7 @@ function drawLowerThird(ctx, W, H, num, text) {
   ctx.restore();
 }
 
-function drawSpeedBadge(ctx, W, H, speed) {
+function drawSpeedBadge(ctx, W, H, speed, left) {
   const S = Math.min(W, H);
   const m = S * 0.04;
   const fs = S * 0.038;
@@ -1718,7 +1998,7 @@ function drawSpeedBadge(ctx, W, H, speed) {
   ctx.font = `800 ${fs}px ${F_UI}`;
   const tri = fs * 0.62;
   const w = hh * 0.45 + tri * 2.1 + fs * 0.45 + ctx.measureText(label).width + hh * 0.45;
-  const x = W - m - w;
+  const x = left ? m : W - m - w;
   const y = m;
   roundRectPath(ctx, x, y, w, hh, hh / 2);
   ctx.fillStyle = CARD.marker;
@@ -1746,8 +2026,10 @@ function drawClipFrame(ctx, v, seg, W, H, opts) {
   ctx.fillRect(0, 0, W, H);
   const r = fitRect(v.videoWidth || W, v.videoHeight || H, W, H);
   ctx.drawImage(v, r.x, r.y, r.w, r.h);
+  if (seg.kind !== 'clip') return; // brand videos stay untouched
   if (opts.captions) drawLowerThird(ctx, W, H, seg.index + 1, seg.step.title || `Step ${seg.index + 1}`);
-  if ((opts.captions || opts.badge) && seg.speed !== 1) drawSpeedBadge(ctx, W, H, seg.speed);
+  if ((opts.captions || opts.badge) && seg.speed !== 1) drawSpeedBadge(ctx, W, H, seg.speed, !!(opts.watermark && Brand.logo && Brand.cfg.wmPos === 'tr'));
+  if (opts.watermark) drawWatermark(ctx, W, H, { liftBottom: opts.captions });
 }
 
 function drawPicFrame(ctx, W, H, comp, seg, opts) {
@@ -1760,6 +2042,7 @@ function drawPicFrame(ctx, W, H, comp, seg, opts) {
     ctx.drawImage(comp, m + r.x, m + r.y, r.w, r.h);
   }
   if (opts.captions) drawLowerThird(ctx, W, H, seg.index + 1, seg.pic.caption || seg.step.title || `Step ${seg.index + 1}`);
+  if (opts.watermark) drawWatermark(ctx, W, H, { liftBottom: opts.captions });
 }
 
 function applyFade(ctx, W, H, u, dur) {
@@ -1781,10 +2064,20 @@ function usableSteps(P, duration) {
     .filter((o) => o.end - o.start >= 0.05);
 }
 
+function extSeg(slot) {
+  const c = Brand.cfg.clips[slot];
+  return { kind: 'ext', slot, url: Brand.urls[slot], start: 0, end: c.duration, speed: 1, dur: c.duration };
+}
 function buildSegments(P, duration, opts) {
   const segs = [];
   const steps = usableSteps(P, duration);
+  if (opts.brandIntro && Brand.has('intro')) segs.push(extSeg('intro'));
   if (opts.intro) segs.push({ kind: 'intro', dur: 2.6 });
+  if (opts.safety) {
+    const n = lines(Brand.cfg.safetyText).length;
+    if (n) segs.push({ kind: 'safety', dur: clamp(2.5 + 1.3 * n, 4, 12) });
+    if (Brand.has('safetyVideo')) segs.push(extSeg('safetyVideo'));
+  }
   steps.forEach((o, i) => {
     const st = o.s;
     if (opts.stepCards) segs.push({ kind: 'stepcard', step: st, index: i, dur: st.caution ? 2.6 : 2 });
@@ -1792,6 +2085,7 @@ function buildSegments(P, duration, opts) {
     const speed = st.speed || 1;
     segs.push({ kind: 'clip', step: st, index: i, start: o.start, end: o.end, speed, dur: (o.end - o.start) / speed });
   });
+  if (opts.brandOutro && Brand.has('outro')) segs.push(extSeg('outro'));
   let t = 0;
   for (const s of segs) { s.t0 = t; t += s.dur; s.t1 = t; }
   return { segs, total: t, nSteps: steps.length };
@@ -1807,37 +2101,51 @@ function outputSize(srcW, srcH, aspect, short) {
   return { W: even(short), H: even(short / ratio) };
 }
 
+const isVideoSeg = (s) => s.kind === 'clip' || s.kind === 'ext';
 function countFrames(segs, total, fps, gif) {
   if (!gif) return Math.max(1, Math.round(total * fps));
-  return segs.reduce((a, s) => a + (s.kind === 'clip' ? Math.max(1, Math.round(s.dur * fps)) : 1), 0);
+  return segs.reduce((a, s) => a + (isVideoSeg(s) ? Math.max(1, Math.round(s.dur * fps)) : 1), 0);
 }
 
 /* Render the whole timeline into a sink (MP4 encoder, GIF encoder or recorder). */
 async function renderTimeline({ P, url, segs, total, nSteps, W, H, fps, gif, sink, opts, onProgress, signal }) {
   const canvas = makeCanvas(W, H);
   const ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: !!gif });
-  const hv = createVideo(url);
-  const info = { title: P.title, author: P.author, tools: lines(P.tools), nSteps, total };
+  const vids = new Map();
+  const getVideo = async (seg) => {
+    const u = seg.kind === 'ext' ? seg.url : url;
+    if (!u) throw new Error('A brand video is missing. Open the brand settings and choose it again.');
+    let v = vids.get(u);
+    if (!v) { v = createVideo(u); vids.set(u, v); await videoReady(v); await ensureFrameData(v); }
+    return v;
+  };
+  const dropVideo = (seg) => {
+    if (seg.kind !== 'ext') return;
+    const v = vids.get(seg.url);
+    if (v) { disposeVideo(v); vids.delete(seg.url); }
+  };
+  const info = { title: P.title, author: P.author, tools: lines(P.tools), nSteps, total, safety: lines(Brand.cfg.safetyText) };
   const statics = new Map();
   const staticCanvas = async (seg) => {
     if (statics.has(seg)) return statics.get(seg);
     const c = makeCanvas(W, H);
     const x = c.getContext('2d', { alpha: false });
     if (seg.kind === 'intro') drawIntroCard(x, W, H, info);
+    else if (seg.kind === 'safety') drawSafetyCard(x, W, H, info.safety);
     else if (seg.kind === 'stepcard') drawStepCard(x, W, H, seg, info);
     else {
       const comp = await picComposite(seg.pic, Math.max(W, H));
       drawPicFrame(x, W, H, comp, seg, opts);
       freeCanvas(comp);
     }
+    if (opts.watermark && seg.kind !== 'pic') drawWatermark(x, W, H);
     statics.set(seg, c);
     return c;
   };
   const dropStatic = (seg) => { const c = statics.get(seg); if (c) { freeCanvas(c); statics.delete(seg); } };
   const checkAbort = () => { if (signal && signal.aborted) throw new DOMException('Export cancelled', 'AbortError'); };
   try {
-    await videoReady(hv);
-    await ensureFrameData(hv);
+    await getVideo({ kind: 'clip' });
     const totalFrames = countFrames(segs, total, fps, gif);
     let done = 0;
     const t0 = performance.now();
@@ -1845,19 +2153,21 @@ async function renderTimeline({ P, url, segs, total, nSteps, W, H, fps, gif, sin
     await sink.init(W, H, fps, canvas);
     if (gif) {
       for (const seg of segs) {
-        if (seg.kind === 'clip') {
+        if (isVideoSeg(seg)) {
+          const v = await getVideo(seg);
           const m = Math.max(1, Math.round(seg.dur * fps));
           for (let k = 0; k < m; k++) {
             checkAbort();
             const st = Math.min(seg.start + (k / fps) * seg.speed, seg.end - 0.001);
-            await seekTo(hv, st);
-            drawClipFrame(ctx, hv, seg, W, H, opts);
+            await seekTo(v, st);
+            drawClipFrame(ctx, v, seg, W, H, opts);
             const ta = seg.t0 + k / fps;
             const tb = k === m - 1 ? seg.t1 : seg.t0 + (k + 1) / fps;
             await sink.addFrame(canvas, ta, tb - ta, false);
             done++;
             report();
           }
+          dropVideo(seg);
         } else {
           checkAbort();
           const c = await staticCanvas(seg);
@@ -1871,17 +2181,19 @@ async function renderTimeline({ P, url, segs, total, nSteps, W, H, fps, gif, sin
     } else {
       let si = 0;
       let lastSt = -1;
+      let lastSeg = null;
       const keyEvery = Math.max(1, Math.round(fps * 2));
       for (let i = 0; i < totalFrames; i++) {
         checkAbort();
         const T = i / fps;
-        while (si < segs.length - 1 && T >= segs[si].t1 - 1e-9) { dropStatic(segs[si]); si++; }
+        while (si < segs.length - 1 && T >= segs[si].t1 - 1e-9) { dropStatic(segs[si]); dropVideo(segs[si]); si++; }
         const seg = segs[si];
         const u = T - seg.t0;
-        if (seg.kind === 'clip') {
+        if (isVideoSeg(seg)) {
+          const v = await getVideo(seg);
           const st = Math.min(seg.start + u * seg.speed, seg.end - 0.001);
-          if (Math.abs(st - lastSt) > 1e-5) { await seekTo(hv, st); lastSt = st; }
-          drawClipFrame(ctx, hv, seg, W, H, opts);
+          if (seg !== lastSeg || Math.abs(st - lastSt) > 1e-5) { await seekTo(v, st); lastSt = st; lastSeg = seg; }
+          drawClipFrame(ctx, v, seg, W, H, opts);
         } else {
           ctx.drawImage(await staticCanvas(seg), 0, 0);
         }
@@ -1897,7 +2209,7 @@ async function renderTimeline({ P, url, segs, total, nSteps, W, H, fps, gif, sin
     throw e;
   } finally {
     statics.forEach((c) => freeCanvas(c));
-    disposeVideo(hv);
+    vids.forEach((v) => disposeVideo(v));
     freeCanvas(canvas);
   }
 }
@@ -2369,6 +2681,7 @@ async function collectDocData(P, url, duration, opts, onProgress, signal) {
     intro: P.intro || '',
     tools: lines(P.tools),
     date: new Date(),
+    safety: opts.safety ? lines(Brand.cfg.safetyText) : [],
     steps: [],
   };
   try {
@@ -2380,6 +2693,7 @@ async function collectDocData(P, url, duration, opts, onProgress, signal) {
       for (const pic of st.pictures) {
         const c = await picComposite(pic, maxSide);
         if (c) {
+          if (opts.watermark) drawWatermark(c.getContext('2d'), c.width, c.height);
           const blob = await canvasToBlob(c, 'image/jpeg', 0.86);
           images.push({ blob, w: c.width, h: c.height, caption: pic.caption || '' });
           freeCanvas(c);
@@ -2391,6 +2705,7 @@ async function collectDocData(P, url, duration, opts, onProgress, signal) {
           if (!hv) { hv = createVideo(url); await videoReady(hv); await ensureFrameData(hv); }
           await seekTo(hv, (o.start + o.end) / 2);
           const c = frameCanvas(hv, maxSide);
+          if (opts.watermark) drawWatermark(c.getContext('2d'), c.width, c.height);
           const blob = await canvasToBlob(c, 'image/jpeg', 0.86);
           images.push({ blob, w: c.width, h: c.height, caption: '', auto: true });
           freeCanvas(c);
@@ -2553,8 +2868,8 @@ async function buildPdf(data, opts) {
   const M = { l: 56, r: 56, t: 58, b: 70 };
   const CW = pdf.W - M.l - M.r;
   const C = {
-    ink: '#1A1F1D', muted: '#5E6A66', faint: '#8A9692', rule: '#D7DEDB', marker: '#FFCF33', markerInk: '#1C1602',
-    mat: '#1D5847', caution: '#E07A10', cautionBg: '#FFF3E4', cautionInk: '#6E3A00', border: '#CBD5D1',
+    ink: '#1A1F1D', muted: '#5E6A66', faint: '#8A9692', rule: '#D7DEDB', marker: '#E75B12', markerInk: '#1A0A00',
+    mat: '#B8450A', caution: '#D99A00', cautionBg: '#FFF7DD', cautionInk: '#5C4200', border: '#CBD5D1',
   };
   let y = 0;
   const bottom = () => pdf.H - M.b;
@@ -2589,6 +2904,16 @@ async function buildPdf(data, opts) {
       textBlock(t, { indent: 18, size: 10.5, after: 2 });
     }
     y += 12;
+  }
+  if (data.safety.length) {
+    const cl = data.safety.flatMap((t) => pdfWrap(`• ${t}`, 'R', 10.5, CW - 30));
+    const boxH = 30 + cl.length * 15 + 8;
+    need(boxH + 6);
+    pdf.rect(M.l, y, CW, boxH, C.cautionBg);
+    pdf.rect(M.l, y, 5, boxH, C.caution);
+    pdf.text(M.l + 18, y + 22, 'SAFETY INSTRUCTIONS', 'B', 8, C.caution, 1.4);
+    cl.forEach((ln, i) => pdf.text(M.l + 18, y + 40 + i * 15, ln, 'R', 10.5, C.cautionInk));
+    y += boxH + 18;
   }
   if (data.steps.length > 1) {
     label('STEPS');
@@ -2747,11 +3072,11 @@ const DOCX_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>
 <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="60" w:line="240" w:lineRule="auto"/></w:pPr><w:rPr><w:b/><w:bCs/><w:sz w:val="52"/><w:szCs w:val="52"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:keepLines/><w:pBdr><w:top w:val="single" w:sz="4" w:space="12" w:color="D7DEDB"/></w:pBdr><w:spacing w:before="360" w:after="120"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:bCs/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:style>
-<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="240" w:after="80"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:bCs/><w:caps/><w:color w:val="1D5847"/><w:spacing w:val="20"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr></w:style>
-<w:style w:type="paragraph" w:customStyle="1" w:styleId="Kicker"><w:name w:val="Kicker"/><w:basedOn w:val="Normal"/><w:next w:val="Title"/><w:pPr><w:spacing w:after="40"/></w:pPr><w:rPr><w:b/><w:bCs/><w:caps/><w:color w:val="1D5847"/><w:spacing w:val="30"/><w:sz w:val="17"/><w:szCs w:val="17"/></w:rPr></w:style>
-<w:style w:type="paragraph" w:customStyle="1" w:styleId="Meta"><w:name w:val="Meta"/><w:basedOn w:val="Normal"/><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="18" w:space="10" w:color="FFCF33"/></w:pBdr><w:spacing w:after="300"/></w:pPr><w:rPr><w:color w:val="5E6A66"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="240" w:after="80"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:bCs/><w:caps/><w:color w:val="B8450A"/><w:spacing w:val="20"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:customStyle="1" w:styleId="Kicker"><w:name w:val="Kicker"/><w:basedOn w:val="Normal"/><w:next w:val="Title"/><w:pPr><w:spacing w:after="40"/></w:pPr><w:rPr><w:b/><w:bCs/><w:caps/><w:color w:val="B8450A"/><w:spacing w:val="30"/><w:sz w:val="17"/><w:szCs w:val="17"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:customStyle="1" w:styleId="Meta"><w:name w:val="Meta"/><w:basedOn w:val="Normal"/><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="18" w:space="10" w:color="E75B12"/></w:pBdr><w:spacing w:after="300"/></w:pPr><w:rPr><w:color w:val="5E6A66"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:customStyle="1" w:styleId="ListItem"><w:name w:val="List Item"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="60"/><w:ind w:left="360" w:hanging="360"/></w:pPr></w:style>
-<w:style w:type="paragraph" w:customStyle="1" w:styleId="Caution"><w:name w:val="Caution"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:pBdr><w:left w:val="single" w:sz="36" w:space="10" w:color="E07A10"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="FFF3E4"/><w:spacing w:before="120" w:after="200"/><w:ind w:left="240" w:right="120"/></w:pPr><w:rPr><w:color w:val="6E3A00"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:customStyle="1" w:styleId="Caution"><w:name w:val="Caution"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:pBdr><w:left w:val="single" w:sz="36" w:space="10" w:color="D99A00"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="FFF7DD"/><w:spacing w:before="120" w:after="200"/><w:ind w:left="240" w:right="120"/></w:pPr><w:rPr><w:color w:val="5C4200"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:styleId="Caption"><w:name w:val="caption"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="240"/><w:jc w:val="center"/></w:pPr><w:rPr><w:i/><w:iCs/><w:color w:val="5E6A66"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:customStyle="1" w:styleId="Picture"><w:name w:val="Picture"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:spacing w:before="120" w:after="80"/><w:jc w:val="center"/></w:pPr></w:style>
 <w:style w:type="paragraph" w:styleId="Footer"><w:name w:val="footer"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="0"/><w:jc w:val="right"/></w:pPr><w:rPr><w:color w:val="8A9692"/><w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr></w:style>
@@ -2786,12 +3111,16 @@ async function buildDocx(data, opts) {
     body += wPara(wRun('You need'), { style: 'Heading2' });
     body += data.tools.map((t) => wPara(wRun('•') + W_TAB + wRun(t), { style: 'ListItem' })).join('');
   }
+  if (data.safety.length) {
+    body += wPara(wRun('Safety instructions'), { style: 'Heading2' });
+    body += data.safety.map((t) => wPara(wRun(t), { style: 'Caution' })).join('');
+  }
   if (data.steps.length > 1) {
     body += wPara(wRun('Steps'), { style: 'Heading2' });
-    body += data.steps.map((st) => wPara(wRun(`${st.n}.`, { b: true, color: '1D5847' }) + W_TAB + wRun(st.title), { style: 'ListItem' })).join('');
+    body += data.steps.map((st) => wPara(wRun(`${st.n}.`, { b: true, color: 'B8450A' }) + W_TAB + wRun(st.title), { style: 'ListItem' })).join('');
   }
   for (const st of data.steps) {
-    body += wPara(wRun(`Step ${st.n}  `, { color: '1D5847' }) + wRun(st.title), { style: 'Heading1' });
+    body += wPara(wRun(`Step ${st.n}  `, { color: 'B8450A' }) + wRun(st.title), { style: 'Heading1' });
     if (st.desc) body += wParas(st.desc, { keepNext: true });
     if (st.caution) body += wPara(wRun('Caution: ', { b: true }) + wRun(st.caution.replace(/\s*\n\s*/g, ' ')), { style: 'Caution' });
     for (const im of st.images) {
@@ -2858,8 +3187,8 @@ ${clipHtml}${await imgs(st)}
 <title>${e(data.title)}</title>
 <meta name="generator" content="Fixframe ${APP_VERSION}">
 <style>
-:root{--ink:#1A1F1D;--muted:#5E6A66;--faint:#8A9692;--rule:#DCE3E0;--paper:#FFFFFF;--wash:#F3F6F5;--marker:#FFCF33;--marker-ink:#1C1602;--mat:#1D5847;--caution:#E07A10;--caution-bg:#FFF3E4;--caution-ink:#6E3A00;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--ink:#ECF2EF;--muted:#A3B2AC;--faint:#6E7E78;--rule:#26332F;--paper:#0E1412;--wash:#151D1A;--mat:#4BB592;--caution-bg:#2A1D10;--caution-ink:#FFC58A;color-scheme:dark}}
+:root{--ink:#1A1F1D;--muted:#5E6A66;--faint:#8A9692;--rule:#DCE3E0;--paper:#FFFFFF;--wash:#F3F6F5;--marker:#E75B12;--marker-ink:#1A0A00;--mat:#B8450A;--caution:#D99A00;--caution-bg:#FFF7DD;--caution-ink:#5C4200;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--ink:#F4EFEB;--muted:#B5ABA3;--faint:#7F756D;--rule:#26332F;--paper:#0E1412;--wash:#151D1A;--mat:#FF8A4C;--caution-bg:#2A2410;--caution-ink:#FFE08A;color-scheme:dark}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
@@ -2889,6 +3218,7 @@ figcaption{color:var(--muted);font-size:14px;margin-top:8px}
 .caution::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:repeating-linear-gradient(135deg,var(--caution) 0 6px,#111 6px 12px)}
 .caution b{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
 .caution p{margin:0}
+.caution ul{margin:4px 0 0;padding-left:20px}
 footer{margin-top:48px;color:var(--faint);font-size:13px;border-top:1px solid var(--rule);padding-top:14px}
 @media print{.clip{display:none}.step{break-inside:avoid-page}figure{break-inside:avoid}body{font-size:12pt}}
 </style>
@@ -2901,6 +3231,7 @@ footer{margin-top:48px;color:var(--faint);font-size:13px;border-top:1px solid va
 <div class="rule"></div>
 ${data.intro ? `<div class="intro">${para(data.intro)}</div>` : ''}
 ${tools}
+${data.safety.length ? `<div class="caution"><b>Safety instructions</b><ul>${data.safety.map((t) => `<li>${e(t)}</li>`).join('')}</ul></div>` : ''}
 ${toc}
 ${steps}
 <footer>Made with Fixframe on ${e(longDate(data.date))}.</footer>
@@ -3087,6 +3418,9 @@ async function openSettings() {
     sections.push(h('div', { class: 'set-section' }, h('h4', null, 'Updates'),
       h('p', null, 'Updates install from the Fixframe website once the app is added to your home screen.')));
   }
+  const brandBtn = h('button', { class: 'btn small', type: 'button' }, 'Open brand settings');
+  sections.push(h('div', { class: 'set-section' }, h('h4', null, 'Brand & safety'),
+    h('p', null, 'Logo watermark, background picture for the cards, brand intro, safety instructions and closing video. Used in every guide.'), brandBtn));
   sections.push(h('div', { class: 'set-section' }, h('h4', null, 'Storage'), store, persist));
   if (!IS_STANDALONE && !IS_FRAMED) {
     sections.push(h('div', { class: 'set-section' }, h('h4', null, 'Install'),
@@ -3098,6 +3432,7 @@ async function openSettings() {
     h('p', null, 'Removes every guide, video and picture, plus the offline copy of the app.'), wipe));
   const m = Modal.open(h('div', { class: 'dlg' }, sections));
   wipe.addEventListener('click', () => { m.close(); wipeEverything(); });
+  brandBtn.addEventListener('click', () => { m.close(); openBrandSettings(); });
 }
 
 async function wipeEverything() {
@@ -4202,11 +4537,11 @@ const FORMATS = [
 ];
 const EX_DEFAULTS = {
   fmt: 'mp4',
-  mp4: { res: '720', aspect: 'source', fps: '30', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', fades: true },
-  gif: { width: '480', fps: '10', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3' },
-  pdf: { paper: 'a4', autoPictures: true },
-  docx: { paper: 'a4', autoPictures: true },
-  html: { clips: true, autoPictures: true },
+  mp4: { res: '720', aspect: 'source', fps: '30', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', fades: true, brandIntro: true, safety: true, brandOutro: true, watermark: true },
+  gif: { width: '480', fps: '10', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', brandIntro: false, safety: true, brandOutro: false, watermark: true },
+  pdf: { paper: 'a4', autoPictures: true, safety: true, watermark: true },
+  docx: { paper: 'a4', autoPictures: true, safety: true, watermark: true },
+  html: { clips: true, autoPictures: true, safety: true, watermark: true },
 };
 const EX_SCHEMA = {
   mp4: [
@@ -4219,6 +4554,10 @@ const EX_SCHEMA = {
     { k: 'pictures', label: 'Show marked-up pictures' },
     { k: 'picDur', label: 'Seconds per picture', seg: [['2', '2'], ['3', '3'], ['4', '4'], ['5', '5']], dep: 'pictures' },
     { k: 'fades', label: 'Fade between parts' },
+    { k: 'brandIntro', label: 'Brand intro video', need: 'intro' },
+    { k: 'safety', label: 'Safety instructions', need: 'safety' },
+    { k: 'brandOutro', label: 'Closing video', need: 'outro' },
+    { k: 'watermark', label: 'Logo watermark', need: 'logo' },
   ],
   gif: [
     { k: 'width', label: 'Width', seg: [['320', '320'], ['480', '480'], ['640', '640']] },
@@ -4228,18 +4567,28 @@ const EX_SCHEMA = {
     { k: 'captions', label: 'Step title and speed on GIF' },
     { k: 'pictures', label: 'Show marked-up pictures' },
     { k: 'picDur', label: 'Seconds per picture', seg: [['2', '2'], ['3', '3'], ['4', '4']], dep: 'pictures' },
+    { k: 'brandIntro', label: 'Brand intro video', need: 'intro' },
+    { k: 'safety', label: 'Safety instructions', need: 'safety' },
+    { k: 'brandOutro', label: 'Closing video', need: 'outro' },
+    { k: 'watermark', label: 'Logo watermark', need: 'logo' },
   ],
   pdf: [
     { k: 'paper', label: 'Paper', seg: [['a4', 'A4'], ['letter', 'Letter']] },
     { k: 'autoPictures', label: 'Add a frame to steps without pictures' },
+    { k: 'safety', label: 'Safety instructions', need: 'safetyText' },
+    { k: 'watermark', label: 'Logo on pictures', need: 'logo' },
   ],
   docx: [
     { k: 'paper', label: 'Paper', seg: [['a4', 'A4'], ['letter', 'Letter']] },
     { k: 'autoPictures', label: 'Add a frame to steps without pictures' },
+    { k: 'safety', label: 'Safety instructions', need: 'safetyText' },
+    { k: 'watermark', label: 'Logo on pictures', need: 'logo' },
   ],
   html: [
     { k: 'clips', label: 'Video clip for each step' },
     { k: 'autoPictures', label: 'Add a frame to steps without pictures' },
+    { k: 'safety', label: 'Safety instructions', need: 'safetyText' },
+    { k: 'watermark', label: 'Logo on pictures', need: 'logo' },
   ],
 };
 const DownloadsCap = {
@@ -4262,6 +4611,7 @@ const Exporter = {
     $('#ex-save').addEventListener('click', () => this.save());
     $('#ex-share').addEventListener('click', () => this.share());
     $('#ex-again').addEventListener('click', () => this.showForm());
+    $('#ex-brand').addEventListener('click', () => openBrandSettings(() => { if (!$('#ex-body').hidden) this.renderForm(); }));
   },
   opts() {
     // Fill missing defaults in place: option buttons keep references to these objects.
@@ -4316,6 +4666,7 @@ const Exporter = {
     const box = $('#ex-opts');
     box.textContent = '';
     for (const row of EX_SCHEMA[ex.fmt]) {
+      if (row.need && !Brand.has(row.need)) continue;
       const off = row.dep && !o[row.dep];
       let ctl;
       if (row.seg) {
@@ -4332,6 +4683,9 @@ const Exporter = {
     }
     $('#ex-summary').textContent = this.summary();
     $('#ex-go').textContent = `Create ${FORMATS.find((f) => f.id === ex.fmt).name.replace(' (MP4)', '')}`;
+  },
+  segOpts(o) {
+    return { intro: o.intro, stepCards: o.stepCards, pictures: o.pictures, picDur: +o.picDur, brandIntro: o.brandIntro, safety: o.safety, brandOutro: o.brandOutro };
   },
   videoSize(o, gif) {
     const v = vid();
@@ -4351,7 +4705,7 @@ const Exporter = {
     const nPics = steps.reduce((a, s) => a + s.s.pictures.length, 0);
     if (ex.fmt === 'mp4' || ex.fmt === 'gif') {
       const gif = ex.fmt === 'gif';
-      const { total } = buildSegments(E.P, E.dur, { intro: o.intro, stepCards: o.stepCards, pictures: o.pictures, picDur: +o.picDur });
+      const { total } = buildSegments(E.P, E.dur, this.segOpts(o));
       const { W, H } = this.videoSize(o, gif);
       let s = `Length ${fmtTime(Math.round(total), false)} · ${W} × ${H} · ${o.fps} fps`;
       if (gif && total > 45) s += ' · long GIFs get large; consider MP4';
@@ -4392,6 +4746,9 @@ const Exporter = {
     $('#ex-result').hidden = true;
     $('#ex-progress').hidden = false;
     this.progress('Getting ready…', '', 0);
+    await Brand.prepareClips();
+    const wm = !!o.watermark && Brand.has('logo');
+    this.wm = wm;
     let wake = null;
     try { if (navigator.wakeLock && navigator.wakeLock.request) wake = await navigator.wakeLock.request('screen'); } catch (e) { /* optional */ }
     try {
@@ -4401,7 +4758,7 @@ const Exporter = {
         const gif = fmt === 'gif';
         const { W, H } = this.videoSize(o, gif);
         const fps = +o.fps;
-        const { segs, total, nSteps } = buildSegments(E.P, E.dur, { intro: o.intro, stepCards: o.stepCards, pictures: o.pictures, picDur: +o.picDur });
+        const { segs, total, nSteps } = buildSegments(E.P, E.dur, this.segOpts(o));
         let sink;
         if (gif) sink = new GifSink();
         else {
@@ -4413,12 +4770,12 @@ const Exporter = {
         }
         blob = await renderTimeline({
           P: E.P, url: E.url, segs, total, nSteps, W, H, fps, gif, sink,
-          opts: { captions: o.captions, fades: !gif && o.fades },
+          opts: { captions: o.captions, fades: !gif && o.fades, watermark: wm },
           onProgress: this.progressFn(gif ? 'Making GIF…' : 'Rendering video…', 'Frame'),
           signal,
         });
       } else {
-        const data = await collectDocData(E.P, E.url, E.dur, { autoPictures: o.autoPictures, maxSide: 1600 },
+        const data = await collectDocData(E.P, E.url, E.dur, { autoPictures: o.autoPictures, maxSide: 1600, watermark: wm, safety: o.safety },
           this.progressFn('Preparing pictures…', 'Picture'), signal);
         if (fmt === 'pdf') { this.progress('Writing PDF…', '', 1); blob = await buildPdf(data, { paper: o.paper }); }
         else if (fmt === 'docx') { this.progress('Writing Word file…', '', 1); blob = await buildDocx(data, { paper: o.paper }); }
@@ -4462,7 +4819,7 @@ const Exporter = {
       seg.t1 = seg.dur;
       clips.push(await renderTimeline({
         P: E.P, url: E.url, segs: [seg], total: seg.dur, nSteps: steps.length, W, H, fps, gif: false, sink: pick.sink,
-        opts: { captions: false, badge: true, fades: false },
+        opts: { captions: false, badge: true, fades: false, watermark: this.wm },
         onProgress: this.progressFn(`Rendering clip ${i + 1} of ${steps.length}…`, 'Frame'),
         signal,
       }));
@@ -4758,11 +5115,16 @@ async function main() {
   $('#btn-settings').addEventListener('click', () => openSettings());
   $('#btn-update-now').addEventListener('click', () => PWA.apply());
   DownloadsCap.get();
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', fitViewport);
+    window.visualViewport.addEventListener('scroll', fitViewport);
+  }
+  await Brand.load();
   await renderHome();
   PWA.init();
   if (await maybeCreateSample()) renderHome();
 }
-window.__ff = { E, Store, TL, PicEditor, Exporter, PWA };
+window.__ff = { E, Store, TL, PicEditor, Exporter, PWA, Brand };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', main); else main();
 
 </script>

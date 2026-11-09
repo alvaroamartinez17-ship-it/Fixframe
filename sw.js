@@ -1,16 +1,17 @@
 /* Fixframe service worker: keeps the app available offline and installs updates only when asked. */
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const CACHE = `fixframe-${VERSION}`;
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './sample.mp4',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/favicon-64.png',
+  './step-bg.jpg',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
+  './apple-touch-icon.png',
+  './favicon-64.png',
 ];
 
 self.addEventListener('install', (event) => {
