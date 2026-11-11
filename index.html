@@ -259,7 +259,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 .act:active { background: var(--panel-3); }
 .act-cap { background: var(--marker-soft); border-color: var(--marker-line); color: var(--ink); }
 .act-cap .ico { color: var(--marker); }
-@media (max-height: 1000px) {
+@media (max-height: 1000px) and (pointer: coarse) {
   .editor.typing .player, .editor.typing .tl, .editor.typing .transport, .editor.typing .actions { display: none; }
 }
 
@@ -529,6 +529,90 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 .set-field .dlg-input { margin: 0; }
 .brand-note { color: var(--caution) !important; }
 
+/* ---------- full-height sheets (settings): header with title and Done, no dimmed strip on phones ---------- */
+.sheet-head {
+  position: sticky; top: -8px; z-index: 3; margin: -8px -18px 12px; padding: 6px 18px 12px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 12px;
+  background: var(--panel); border-bottom: 1px solid var(--hair); touch-action: none; cursor: grab;
+}
+.sheet-head .sheet-grip { grid-column: 1 / -1; margin: 2px auto 6px; }
+.sheet-title { margin: 0; font: 800 22px/1.1 var(--f-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet-done { min-width: 76px; }
+.modal-back:not(.top) .sheet > .sheet-grip { touch-action: none; cursor: grab; padding: 8px 0; margin: -6px auto 8px; background-clip: content-box; height: 21px; }
+@media (max-width: 639px) {
+  .modal-back.full { align-items: stretch; }
+  .modal-back.full .sheet { max-width: none; max-height: none; height: 100%; border: 0; border-radius: 0; padding-top: 0; }
+  .modal-back.full .sheet-head { top: 0; margin-top: 0; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+}
+@media (min-width: 640px) {
+  .modal-back.full .sheet { max-width: 600px; max-height: min(88vh, calc(var(--vv-h, 100vh) - 48px)); }
+}
+
+/* ---------- start screen groups and dropping files ---------- */
+.home-side, .home-list { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.drop-hint { display: none; margin: -6px 0 0; font-size: 13px; color: var(--ink-3); text-align: center; }
+.drop-zone {
+  position: fixed; inset: 0; z-index: 70; display: none; place-items: center; pointer-events: none;
+  background: rgba(16, 14, 13, 0.82); padding: 24px;
+}
+.drop-zone div {
+  width: min(560px, 100%); padding: 56px 24px; border: 2px dashed var(--marker); border-radius: 20px; text-align: center;
+  font: 800 26px/1.1 var(--f-display); color: var(--ink); background: var(--marker-soft);
+}
+.drop-zone.on { display: grid; }
+
+/* ---------- mouse and trackpad ---------- */
+@media (hover: hover) {
+  .btn:hover { background: var(--panel-3); }
+  .btn.primary:hover, .btn.accent:hover { background: var(--marker-press); border-color: var(--marker-press); }
+  .btn.ghost:hover { background: var(--panel-3); }
+  .btn.danger-ghost:hover { background: rgba(255, 92, 80, 0.22); }
+  .icon-btn:hover { background: var(--panel-3); }
+  .icon-btn.play:hover { background: var(--marker-press); }
+  .proj:hover { border-color: var(--hair-2); background: var(--panel-2); }
+  .act:hover, .fmt:hover, .src-chip:hover, .tool:hover { background: var(--panel-3); }
+  .seg button:hover:not([aria-pressed="true"]), .sizes button:hover:not([aria-pressed="true"]) { background: var(--panel-3); color: var(--ink); }
+  .tabs button:hover { color: var(--ink); }
+  .ed-title:hover { background: var(--panel-2); }
+}
+
+/* ---------- desktop and laptop (Chrome, Edge, Safari from 1024 px wide) ---------- */
+@media (min-width: 1024px) {
+  .home-bar { max-width: 1240px; margin: 0 auto; padding: 18px 32px 10px; }
+  .update-banner { max-width: 1176px; margin: 0 auto 12px; }
+  .home-main { max-width: 1240px; display: grid; grid-template-columns: minmax(340px, 400px) minmax(0, 1fr); gap: 32px 48px; align-items: start; padding: 8px 32px 56px; }
+  .home-side { position: sticky; top: 24px; }
+  .drop-hint { display: block; }
+  .intro-card { padding: 28px 26px 22px; }
+  .intro-card h1 { font-size: 36px; }
+  .list-head { margin-top: 0; }
+  .projects { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+  .proj-title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .proj { padding: 10px 6px 10px 10px; }
+  .proj-thumb { width: 132px; }
+  .storage-line { text-align: left; }
+
+  /* editor: video, timeline and buttons on the left over the full height, steps and guide info on the right */
+  .editor:not([hidden]) {
+    display: grid; grid-template-columns: minmax(0, 1fr) clamp(380px, 32vw, 480px); grid-template-rows: auto minmax(0, 1fr);
+    height: 100vh; height: 100dvh; overflow: hidden;
+  }
+  .editor .stage { grid-column: 1; grid-row: 1 / span 2; position: relative; top: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--hair); }
+  .editor .ed-bar { padding-left: 16px; padding-right: 16px; }
+  .editor .player { flex: 1; height: auto; min-height: 240px; }
+  .editor .tl { flex: none; }
+  .editor .transport { padding: 8px 20px 4px; }
+  .editor .actions { grid-template-columns: repeat(4, minmax(0, 170px)); justify-content: center; gap: 10px; padding: 8px 20px 14px; border-bottom: 0; }
+  .editor .act { flex-direction: row; gap: 8px; min-height: 46px; font-size: 14px; }
+  .editor .tabs { grid-column: 2; grid-row: 1; padding: 10px 20px 0; }
+  .editor .panel { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; max-width: none; margin: 0; padding: 16px 20px 48px; overscroll-behavior: contain; }
+  .editor .step { scroll-margin-top: 12px; }
+
+  /* picture markup and export: tools and options stay a readable width */
+  .pe-bar { padding-left: max(24px, calc((100vw - 920px) / 2)); padding-right: max(24px, calc((100vw - 920px) / 2)); }
+  .ex-body { padding-top: 16px; }
+}
+
 </style>
 </head>
 <body>
@@ -549,6 +633,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
       <button class="btn small accent" id="btn-update-now">Install</button>
     </div>
     <main class="home-main">
+      <div class="home-side">
       <section class="intro-card" id="intro-card">
         <h1>Turn a repair video into a step-by-step guide.</h1>
         <ol class="howto">
@@ -560,11 +645,16 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
       </section>
       <button class="btn primary big" id="btn-new" data-icon="plus">New guide from video</button>
       <button class="btn wide" id="btn-open-edit" data-icon="editfile">Open an edit file</button>
+      <p class="drop-hint">Or drop video files or an edit file anywhere on this window.</p>
+      </div>
+      <div class="home-list">
       <div class="list-head"><h2 class="label">Your guides</h2><span class="count" id="proj-count"></span></div>
       <ul class="projects" id="projects"></ul>
       <p class="empty-note" id="projects-empty" hidden>No guides yet. Pick one or more repair videos from your camera roll to start.</p>
       <p class="storage-line" id="storage-line"></p>
+      </div>
     </main>
+    <div class="drop-zone" id="drop-zone" aria-hidden="true"><div>Drop to start a guide</div></div>
   </section>
 
   <section id="editor" class="view editor" hidden>
@@ -715,7 +805,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 <script>
 'use strict';
 /* Fixframe — turn a repair video into a step-by-step guide. Videos and project data are processed locally in the browser. */
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.4.1';
 const PRIVACY_TEXT = "Your videos and project data are processed locally in this browser. Fixframe does not upload them to its server. Files leave the app only when you choose to save, download, export or share them."; // from src/privacy.txt
 const EDIT_FILE_TEXT = 'It does not contain the full video. It contains project information and a small preview image for each source video.';
 const IS_FRAMED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
@@ -880,10 +970,41 @@ function closeImage(img) { try { if (img && img.close) img.close(); } catch (e) 
 
 /* ---------- sheets, dialogs, toasts ---------- */
 const Modal = {
-  open(content, { onClose, dismissable = true, top = false } = {}) {
-    const back = h('div', { class: 'modal-back' + (top ? ' top' : '') });
-    const sheet = h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true' }, h('div', { class: 'sheet-grip', 'aria-hidden': 'true' }), content);
+  /* full: a sheet over the whole phone screen (a centred dialog on wide screens) with a header holding the title and
+     a Done button. Every sheet that can be dismissed closes with a swipe down on its grip or header. */
+  open(content, { onClose, dismissable = true, top = false, full = false, title = '' } = {}) {
+    const back = h('div', { class: 'modal-back' + (top ? ' top' : '') + (full ? ' full' : '') });
+    const grip = h('div', { class: 'sheet-grip', 'aria-hidden': 'true' });
+    const head = full
+      ? h('div', { class: 'sheet-head' }, grip, h('h3', { class: 'sheet-title' }, title),
+        dismissable ? h('button', { class: 'btn small sheet-done', type: 'button', onClick: () => close(null) }, 'Done') : null)
+      : grip;
+    const sheet = h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': title || null }, head, content);
     back.append(sheet);
+    if (dismissable && !top) {
+      let y0 = null;
+      let dy = 0;
+      head.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button')) return;
+        y0 = e.clientY; dy = 0;
+        sheet.style.transition = 'none';
+        try { head.setPointerCapture(e.pointerId); } catch (err) { /* old browsers */ }
+      });
+      head.addEventListener('pointermove', (e) => {
+        if (y0 == null) return;
+        dy = Math.max(0, e.clientY - y0);
+        sheet.style.transform = `translateY(${dy}px)`;
+      });
+      const end = () => {
+        if (y0 == null) return;
+        y0 = null;
+        sheet.style.transition = '';
+        if (dy > 80) close(null);
+        else sheet.style.transform = '';
+      };
+      head.addEventListener('pointerup', end);
+      head.addEventListener('pointercancel', end);
+    }
     $('#modal-root').append(back);
     requestAnimationFrame(() => requestAnimationFrame(() => back.classList.add('in')));
     let closed = false;
@@ -1599,7 +1720,6 @@ function openBrandSettings(onClose) {
     safety.value = Brand.cfg.safetyText || '';
     const picture = Brand.cfg.cardBg === 'picture';
     setKids(body,
-      h('h3', { class: 'dlg-title' }, 'Brand & safety'),
       h('p', { class: 'dlg-msg' }, 'Used in every guide and saved in this browser. Switch each part on or off when you export.'),
       h('div', { class: 'set-section', id: 'brand-design' }, h('h4', null, 'Export design'),
         h('p', null, 'Videos, PDF, Word and HTML guides share one look: black stage, white type, pictures on a grey stage.'),
@@ -1633,7 +1753,7 @@ function openBrandSettings(onClose) {
       h('p', { class: 'hint' }, 'Brand videos are fitted into the frame and play without sound, like the rest of the export.'));
   }
   draw();
-  Modal.open(body, { onClose: () => { saveText.flush(); if (onClose) onClose(); } });
+  Modal.open(body, { full: true, title: 'Brand & safety', onClose: () => { saveText.flush(); if (onClose) onClose(); } });
 }
 
 /* Picture markup: arrows, info boxes (with optional pointer), circles, frames, numbers.
@@ -4832,7 +4952,6 @@ async function openSettings() {
   const wipe = h('button', { class: 'btn danger-ghost', type: 'button' }, icon('trash'), 'Delete all guides and reset');
   let m = null;
   const sections = [
-    h('h3', { class: 'dlg-title' }, 'Fixframe'),
     h('div', { class: 'set-section' },
       h('h4', null, 'Your name'), name,
       h('p', null, 'Written into the guides you start and the edit files you create, so others can see who made them. Saved in this browser.')),
@@ -4860,7 +4979,7 @@ async function openSettings() {
   }
   sections.push(h('div', { class: 'set-section' }, h('h4', null, 'Reset'),
     h('p', null, 'Removes every guide, video and picture, plus the offline copy of the app.'), wipe));
-  m = Modal.open(h('div', { class: 'dlg' }, sections), { onClose: () => saveName.flush() });
+  m = Modal.open(h('div', { class: 'dlg' }, sections), { full: true, title: 'Settings', onClose: () => saveName.flush() });
   wipe.addEventListener('click', () => { m.close(); wipeEverything(); });
   brandBtn.addEventListener('click', () => { m.close(); openBrandSettings(); });
 }
@@ -6790,8 +6909,8 @@ async function ensureUserName() {
   }
 }
 
-async function openEditFileFlow() {
-  const f = await pickFile('.json,application/json');
+async function openEditFileFlow(dropped) {
+  const f = dropped || await pickFile('.json,application/json');
   if (!f) return;
   let data;
   try {
@@ -7537,6 +7656,30 @@ function bindEditor() {
   window.addEventListener('pagehide', () => { if (E.P) saveNow(); });
 }
 
+/* Laptop: drop videos (new guide) or a .fixframe.json (open edit file) on the start screen. */
+function bindDrop() {
+  const zone = $('#drop-zone');
+  let depth = 0;
+  const homeOpen = () => !$('#home').hidden && !$('#modal-root').children.length && !$('#gate');
+  const hasFiles = (e) => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+  document.addEventListener('dragenter', (e) => { if (!hasFiles(e) || !homeOpen()) return; depth++; zone.classList.add('on'); });
+  document.addEventListener('dragleave', () => { if (depth && --depth === 0) zone.classList.remove('on'); });
+  document.addEventListener('dragover', (e) => { if (hasFiles(e)) e.preventDefault(); });
+  document.addEventListener('drop', (e) => {
+    if (!hasFiles(e)) return;
+    e.preventDefault();
+    depth = 0;
+    zone.classList.remove('on');
+    if (!homeOpen()) return;
+    const files = Array.from(e.dataTransfer.files || []);
+    const json = files.find((f) => /\.json$/i.test(f.name) || f.type === 'application/json');
+    const videos = files.filter((f) => /^video\//.test(f.type) || /\.(mp4|mov|m4v|webm|mkv|3gp)$/i.test(f.name));
+    if (json) openEditFileFlow(json);
+    else if (videos.length) newProjectFromFiles(videos);
+    else toast('Drop video files or a Fixframe edit file.', 'err');
+  });
+}
+
 async function main() {
   fillIcons();
   bindEditor();
@@ -7560,6 +7703,7 @@ async function main() {
   }
   await App.load();
   await Brand.load();
+  bindDrop();
   XFont.load(); // export font, loaded in the background; exports wait for it
   PWA.init();
   await Access.start();

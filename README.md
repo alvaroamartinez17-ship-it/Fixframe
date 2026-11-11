@@ -33,13 +33,19 @@ in the build, or the `PRIVACY_TEXT` line plus the start-screen paragraph in `ind
   home-screen icon. The installed app keeps its own guides, separate from Safari, so create your guides in the installed app.
 - **Android (Chrome):** open the address, then **⋮ → Install app** (or *Add to Home screen*).
 
+- **Laptop or desktop (Chrome or Edge):** open the address. Wide windows get a desktop layout: video and timeline on
+  the left, steps on the right. Video files and edit files can be dropped onto the start screen. To install it as a
+  window of its own, use the install icon at the right end of the address bar (or ⋮ → *Cast, save and share* →
+  *Install page as app*). Guides are stored per browser and device: a guide made on the phone reaches the laptop
+  through an edit file plus its videos.
+
 After the first start the app also works offline.
 
 ## Releasing an update
 
 1. Change the version in **two places** and keep them identical:
-   - `index.html`: `const APP_VERSION = '1.4.0';`
-   - `sw.js`: `const VERSION = '1.4.0';`
+   - `index.html`: `const APP_VERSION = '1.4.1';`
+   - `sw.js`: `const VERSION = '1.4.1';`
 2. Upload the changed files to the repository.
 3. In the app: **Settings (sliders icon) → Check for updates → Install update**. The app also checks a few
    seconds after it starts and shows an *Update ready* banner. Guides are kept during updates.
