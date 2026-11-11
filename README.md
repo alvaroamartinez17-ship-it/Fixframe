@@ -44,8 +44,8 @@ After the first start the app also works offline.
 ## Releasing an update
 
 1. Change the version in **two places** and keep them identical:
-   - `index.html`: `const APP_VERSION = '1.4.1';`
-   - `sw.js`: `const VERSION = '1.4.1';`
+   - `index.html`: `const APP_VERSION = '1.5.0';`
+   - `sw.js`: `const VERSION = '1.5.0';`
 2. Upload the changed files to the repository.
 3. In the app: **Settings (sliders icon) → Check for updates → Install update**. The app also checks a few
    seconds after it starts and shows an *Update ready* banner. Guides are kept during updates.
@@ -68,6 +68,18 @@ of the app download: it comes from the private owner kit (`fixframe-owner.html`)
 
 This is a lock for honest users, not copy protection: the app is a public web page, so someone who can program can
 read how it works and get around it.
+
+## Old videos (3GP, AVI, Motion JPEG)
+
+Browsers no longer play the video formats of older phones and cameras. Fixframe converts these on the device into
+an MP4 (H.264) when you add them; the original file is not changed and nothing is uploaded. The sound is not kept.
+
+- **3GP / 3G2 / MP4 / MOV with H.263 or MPEG-4 Part 2** – older Android and feature phones (3GP files), early
+  smartphones and cameras.
+- **AVI with MPEG-4 Part 2** (Xvid / DivX, Simple Profile) and **AVI or MOV with Motion JPEG** – older digital cameras.
+- Not converted (a message names the reason): MPEG-4 with B-frames or other Advanced Simple Profile features (Xvid's
+  default), data partitioning, H.263+ options, WMV, FLV, MPEG-1/2. Convert those to MP4 (H.264) first, e.g. with VLC.
+- 3GP files with H.264 video play directly.
 
 ## Several videos in one guide
 
@@ -121,8 +133,10 @@ The app's own screens keep their orange look.
 - **Logo watermark:** load your logo (PNG with transparent background works best); choose corner, size and opacity.
 - **Background picture for cards:** the title, safety and step cards use `step-bg.jpg`, shown grey and darkened.
   Load your own picture in the app, or replace `step-bg.jpg` in the repository to change the standard one.
-- **Brand intro video, safety instructions (text and/or video), closing video:** stored once, used in every guide.
-  Each part can be switched on or off on the export screen.
+- **Brand intro, safety instructions (text and/or a video or picture), closing:** stored once, used in every guide.
+  Each can be a video (old formats are converted) or a picture shown for 3, 5, 8 or 10 seconds: JPEG, PNG, WebP, AVIF,
+  GIF, BMP, SVG, TIFF, and HEIC where the browser can read it (Safari; on iPhone, pictures from Photos are converted
+  automatically). Each part can be switched on or off on the export screen.
 
 ## Reset
 
