@@ -1,5 +1,5 @@
 /* Fixframe service worker: keeps the app available offline and installs updates only when asked. */
-const VERSION = '1.1.0';
+const VERSION = '1.4.0';
 const CACHE = `fixframe-${VERSION}`;
 const ASSETS = [
   './',
@@ -7,6 +7,8 @@ const ASSETS = [
   './manifest.webmanifest',
   './sample.mp4',
   './step-bg.jpg',
+  './fx-font-regular.ttf',
+  './fx-font-bold.ttf',
   './icon-192.png',
   './icon-512.png',
   './icon-maskable-512.png',

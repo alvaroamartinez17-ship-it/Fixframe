@@ -1,0 +1,31 @@
+{
+ "about": "Fixframe access list, made with the owner tool. The place of a code in the list is its invitation number.",
+ "fixframe-access": 1,
+ "contact": "",
+ "exportLimit": 10,
+ "salt": "6e943d99392f46bcb97107a3f0b59fed",
+ "rounds": 100000,
+ "unlock": "298576d4fa6e28f2da3d698e747c38b6",
+ "codes": [
+  "954f870b41123ac15cf01e03c7679ab9",
+  "1f8d9eec27f4b8602d5303e6f92c4121",
+  "6ed63e3b39dbf43ade230f34e054a170",
+  "530d0982a2700b008212202db51cfcf3",
+  "4dcb8eef0bd772afe1d72868a981e44e",
+  "c7cdd8c3e39e7519b6c02d64c033d47a",
+  "ac6df20e34049e412ad837f91cb5f38d",
+  "a2a11fd26338dfa2378f975f7ee03df4",
+  "11193be5aefbbfb6cab6729abdbc177f",
+  "b08f4c1db0ec0bf599ee87c69cc4a195",
+  "0348c075d5f7d39b4f6afb90f714984f",
+  "25241b039a0b892ea0bc7232c97adf13",
+  "2d0707545b8d78017c31ed9558aa783b",
+  "851e2a39583bfa50cc44deb02208f455",
+  "04339488a6f81a820f9b87b2fe7e98bd",
+  "429613af1ee16b8774933e5b2380aa3b",
+  "8be834e885b091f65be18f4869b84913",
+  "99f85183729d28cfea3f84614d13d758",
+  "2c62f6710d5429799bab583009d6fc43",
+  "fd5d14c4305e05b03832da779bc2134f"
+ ]
+}

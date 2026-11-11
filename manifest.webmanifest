@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Fixframe – repair guides from video",
   "short_name": "Fixframe",
-  "description": "Cut a repair video into steps, mark up pictures and export MP4, GIF, PDF, Word or HTML. Everything stays on your phone.",
+  "description": "Cut a repair video into steps, mark up pictures and export MP4, GIF, PDF, Word or HTML. Videos are processed locally in the browser.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
