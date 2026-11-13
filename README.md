@@ -10,15 +10,9 @@ Fixframe turns repair videos into a step-by-step guide, right on your phone:
 
 **Privacy:** Your videos and project data are processed locally in this browser. Fixframe does not upload them to
 its server. Files leave the app only when you choose to save, download, export or share them.
-The app contacts only the website that hosts it (your GitHub Pages site), and as little as possible:
-- the first visit downloads the app once; after that it starts from the offline copy;
-- it looks for a new version only when you tap **Settings → Check for updates** (never by itself);
-- with an invitation list it reads `access.json` when a code is entered and then only every few days
-  (7 by default, set in the owner tool), when the app is opened with a connection.
-
-It sends nothing: invitation codes and unlock codes are checked on the device. The browser itself may still look at
-the small file `sw.js` now and then when the app is opened online (web apps cannot switch this off); Fixframe makes
-sure such a look downloads and installs nothing.
+The app contacts the website that hosts it (your GitHub Pages site) only to load its own files, to check for updates
+and to load `access.json` (the invitation list, if you use one). It sends nothing: invitation codes and unlock codes
+are checked on the device.
 The same statement is shown on the start screen and under Settings → Privacy; its single source is `src/privacy.txt`
 in the build, or the `PRIVACY_TEXT` line plus the start-screen paragraph in `index.html`.
 
@@ -39,23 +33,16 @@ in the build, or the `PRIVACY_TEXT` line plus the start-screen paragraph in `ind
   home-screen icon. The installed app keeps its own guides, separate from Safari, so create your guides in the installed app.
 - **Android (Chrome):** open the address, then **⋮ → Install app** (or *Add to Home screen*).
 
-- **Laptop or desktop (Chrome or Edge):** open the address. Wide windows get a desktop layout: video and timeline on
-  the left, steps on the right. Video files and edit files can be dropped onto the start screen. To install it as a
-  window of its own, use the install icon at the right end of the address bar (or ⋮ → *Cast, save and share* →
-  *Install page as app*). Guides are stored per browser and device: a guide made on the phone reaches the laptop
-  through an edit file plus its videos.
-
 After the first start the app also works offline.
 
 ## Releasing an update
 
 1. Change the version in **two places** and keep them identical:
-   - `index.html`: `const APP_VERSION = '1.5.5';`
-   - `sw.js`: `const VERSION = '1.5.5';`
+   - `index.html`: `const APP_VERSION = '1.4.0';`
+   - `sw.js`: `const VERSION = '1.4.0';`
 2. Upload the changed files to the repository.
-3. In the app: **Settings (sliders icon) → Check for updates → Install update**. Nothing happens automatically:
-   each phone or laptop gets the new version only when someone taps *Check for updates* there. Guides are kept during
-   updates. (Phones still on 1.5.1 or older check by themselves one last time and show the *Update ready* banner.)
+3. In the app: **Settings (sliders icon) → Check for updates → Install update**. The app also checks a few
+   seconds after it starts and shows an *Update ready* banner. Guides are kept during updates.
 
 ## Invitation codes and unlock codes (optional)
 
@@ -68,26 +55,13 @@ of the app download: it comes from the private owner kit (`fixframe-owner.html`)
   the app shows a request number and asks for an 8-digit unlock code. Editing and PDF, Word and HTML guides are not
   counted.
 - **Block a code / new codes / other limit:** change it in the owner tool, download the new `access.json`, upload it here
-  (Add file → Upload files). Activated phones read the list again only every few days (owner tool → Settings →
-  *Check the list again every … days*, 7 by default; 0 = never after activation), so a blocked code stops at the next
-  check. GitHub Pages can take a few minutes to serve a new file.
+  (Add file → Upload files). Phones read the list each time the app starts with a connection; GitHub Pages can take a
+  few minutes to serve a new file.
 - **Switch it all off:** delete `access.json` from the repository.
 - Do **not** upload `fixframe-owner.html`, `fixframe-owner.json` or `invitation-codes.txt`: they contain the codes.
 
 This is a lock for honest users, not copy protection: the app is a public web page, so someone who can program can
 read how it works and get around it.
-
-## Old videos (3GP, AVI, Motion JPEG)
-
-Browsers no longer play the video formats of older phones and cameras. Fixframe converts these on the device into
-an MP4 (H.264) when you add them; the original file is not changed and nothing is uploaded. The sound is not kept.
-
-- **3GP / 3G2 / MP4 / MOV with H.263 or MPEG-4 Part 2** – older Android and feature phones (3GP files), early
-  smartphones and cameras.
-- **AVI with MPEG-4 Part 2** (Xvid / DivX, Simple Profile) and **AVI or MOV with Motion JPEG** – older digital cameras.
-- Not converted (a message names the reason): MPEG-4 with B-frames or other Advanced Simple Profile features (Xvid's
-  default), data partitioning, H.263+ options, WMV, FLV, MPEG-1/2. Convert those to MP4 (H.264) first, e.g. with VLC.
-- 3GP files with H.264 video play directly.
 
 ## Several videos in one guide
 
@@ -141,10 +115,8 @@ The app's own screens keep their orange look.
 - **Logo watermark:** load your logo (PNG with transparent background works best); choose corner, size and opacity.
 - **Background picture for cards:** the title, safety and step cards use `step-bg.jpg`, shown grey and darkened.
   Load your own picture in the app, or replace `step-bg.jpg` in the repository to change the standard one.
-- **Brand intro, safety instructions (text and/or a video or picture), closing:** stored once, used in every guide.
-  Each can be a video (old formats are converted) or a picture shown for 3, 5, 8 or 10 seconds: JPEG, PNG, WebP, AVIF,
-  GIF, BMP, SVG, TIFF, and HEIC where the browser can read it (Safari; on iPhone, pictures from Photos are converted
-  automatically). Each part can be switched on or off on the export screen.
+- **Brand intro video, safety instructions (text and/or video), closing video:** stored once, used in every guide.
+  Each part can be switched on or off on the export screen.
 
 ## Reset
 
@@ -155,18 +127,8 @@ or *Uninstall* (Android).
 ## Good to know
 
 - Exported videos and GIFs are silent.
-- MP4 export uses the device's video encoder (iOS 16.4+ / current Chrome on Android, Chrome or Edge on a computer).
-  Since 1.5.1 the frames of MP4, MOV and WebM-in-MP4 files are decoded in order (WebCodecs) instead of seeking the
-  video for every frame, so rendering takes roughly as long as the finished video. Fragmented MP4s and formats the
-  decoder does not offer (for example HEVC in some browsers) still use the slower way.
-- Before the fast way is used for a video, Fixframe compares two of its pictures with the browser's own video player
-  on that device (since 1.5.5). If they differ, or the decoder stops answering, that video is read the careful way
-  (seeking, slower) and a short message says so. The export option **Fast rendering** switches the fast way off
-  completely.
-- While a video renders, the export screen shows a looping animation (chainsaw, car, downhill bike, coffee machine).
-  It is drawn inside `index.html`, so nothing is loaded for it.
-- Keep Fixframe open and in front until an export finishes. Browsers slow down pages in background tabs and
-  minimised windows, and the screen should stay on.
+- MP4 export uses the phone's video encoder (iOS 16.4+ / current Chrome on Android). Rendering takes roughly
+  as long as the finished video; keep the app open and the screen on until it finishes.
 - Fixframe keeps its own copy of each video in the browser's storage. Delete guides you no longer need to free space;
   your original video files are not touched.
 - Guides made with earlier versions keep working; they are converted when opened.
