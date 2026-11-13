@@ -469,6 +469,8 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 .toggle:checked::after { transform: translateX(20px); background: var(--marker-ink); }
 .ex-summary { margin: 0; color: var(--ink-2); font: 500 12.5px/1.5 var(--f-mono); }
 .ex-progress, .ex-result { flex: 1; overflow-y: auto; display: grid; align-content: center; gap: 14px; padding: 20px var(--gutter-r) 24px var(--gutter-l); width: 100%; max-width: 560px; margin: 0 auto; }
+.ex-loader { display: block; width: min(240px, 62vw); height: auto; aspect-ratio: 4 / 3; margin: 0 auto 4px; user-select: none; pointer-events: none; }
+@media (max-height: 560px) { .ex-loader { width: min(150px, 40vw); } }
 .ex-prog-title { font: 800 24px/1.1 var(--f-display); text-align: center; }
 .ex-prog-sub { font: 500 13px/1.4 var(--f-mono); color: var(--ink-2); text-align: center; min-height: 18px; }
 .ex-prog-note { margin: 0; font-size: 13px; color: var(--ink-3); text-align: center; }
@@ -777,10 +779,11 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
     <button class="btn primary big" id="ex-go"></button>
   </div>
   <div class="ex-progress" id="ex-progress" hidden>
+    <svg class="ex-loader" id="ex-loader" aria-hidden="true" focusable="false" viewBox="0 0 120 90" fill="none" stroke="#F2EDE8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><style>.ldr-fxo{stroke:#E75B12}.ldr-fxf{fill:#E75B12;stroke:none}.ldr-fxl{fill:#F2EDE8;stroke:none}.ldr-cm{animation:ldr-cm 3s infinite}@keyframes ldr-cm{8%,88%{transform:none}58%,66%{transform:translateY(19px)}}.ldr-cc{stroke-dasharray:2 3;animation:ldr-cc .3s linear infinite}@keyframes ldr-cc{to{stroke-dashoffset:-10}}.ldr-cp{transform-origin:92px 72px;animation:ldr-cp 3s infinite}@keyframes ldr-cp{58%{transform:none}72%,86%{transform:translate(4px,8px) rotate(10deg);opacity:1}92%{transform:translate(4px,8px) rotate(10deg);opacity:0}93%{transform:none;opacity:0}}.ldr-px{animation:ldr-px 3s infinite}@keyframes ldr-px{26%{transform:none;animation-timing-function:cubic-bezier(.6,0,1,.5)}62%{transform:translateX(125px)}62.01%{transform:translateX(-125px);animation-timing-function:ease-out}}.ldr-pw{animation:ldr-pw 3s infinite}@keyframes ldr-pw{26%{transform:none;animation-timing-function:cubic-bezier(.6,0,1,.5)}62%{transform:rotate(3turn)}62.01%{transform:none;animation-timing-function:ease-out}to{transform:rotate(2turn)}}.ldr-ph{animation:ldr-ph 3s infinite}@keyframes ldr-ph{0%,5%,9%{opacity:0}7%,12%{opacity:1}}.ldr-pl{opacity:0;animation:ldr-pl 3s infinite}@keyframes ldr-pl{32%,62%{opacity:0}42%,58%{opacity:1}68%,80%{opacity:.7}}.ldr-bx{animation:ldr-bx 3s linear infinite}@keyframes ldr-bx{0%{transform:translateX(-55px)}to{transform:translateX(128px)}}.ldr-by{animation:ldr-by 3s linear infinite}@keyframes ldr-by{49%{transform:none;animation-timing-function:cubic-bezier(.3,-.3,.85,.6)}73%{transform:translateY(29.8px)}to{transform:translateY(43.8px)}}.ldr-bw{stroke-width:2.4;stroke-linecap:butt;stroke-dasharray:1.9 1.87;animation:ldr-bw .3s linear infinite}@keyframes ldr-bw{to{stroke-dashoffset:-7.54}}.ldr-br{transform-origin:0 -15px;animation:ldr-br 3s ease-in-out infinite}@keyframes ldr-br{0%,49%{transform:rotate(0) scaleX(1) skewY(0)}60%{transform:rotate(-12deg) scaleX(.66) skewY(-10deg)}70%{transform:rotate(10deg) scaleX(.95) skewY(0)}74%,to{transform:rotate(15.6deg) scaleX(1) skewY(0)}}.ldr-ks{transform-origin:0 40px;animation:ldr-ks 3s infinite}@keyframes ldr-ks{0%,8%{transform:scaleY(0)}14%,60%{transform:none;opacity:1}64%,to{transform:none;opacity:0}}.ldr-kf{transform-origin:0 73px;animation:ldr-kf 3s linear infinite}@keyframes ldr-kf{0%,14%{transform:scaleY(0)}60%,90%{transform:none;opacity:1}97%,to{transform:none;opacity:0}}.ldr-kb{transform-origin:39px 0;animation:ldr-kb 3s linear infinite}@keyframes ldr-kb{0%,8%{transform:scaleX(0)}60%,90%{transform:none;opacity:1}97%,to{transform:none;opacity:0}}.ldr-s{opacity:0;animation:ldr-s 12s steps(1) infinite}.ldr-s2{animation-delay:3s}.ldr-s3{animation-delay:6s}.ldr-s4{animation-delay:9s}@keyframes ldr-s{0%{opacity:1}25%,to{opacity:0}}@media(prefers-reduced-motion:reduce){.ex-loader *{animation:none!important}.ldr-s1{opacity:1}}</style><g class="ldr-s ldr-s1"><path d="M6 80H114M22 72v8M62 72v8"/><rect x="10" y="61" width="68" height="11" rx="3"/><rect class="ldr-cp" x="80" y="61" width="24" height="11" rx="3"/><g class="ldr-cm"><g transform="translate(49 40) rotate(28) scale(.9)"><path d="M-26-5h-10v13h10M-21-9c0-9 4-11 9-11h3c5 0 6 4 6 11"/><rect class="ldr-fxf" x="-26" y="-9" width="27" height="18" rx="4"/><rect class="ldr-cc ldr-fxo" fill="#F2EDE8" stroke-width="1.6" x="1" y="-4.5" width="40" height="9" rx="4.5"/></g></g></g><g class="ldr-s ldr-s2"><path d="M6 80H114"/><g class="ldr-px"><g transform="translate(19 20)"><path class="ldr-pl" d="M-6 38h-14M-10 45h-18M-6 51h-10"/><path class="ldr-fxf" d="M3 53V46Q3 42 8 40Q20 29 32 29h4Q44 29 51 39L76 43Q82 44 82 50V53z"/><path class="ldr-fxl" d="M17 38Q24 32 32 32h3Q41 32 46 38z"/><path class="ldr-ph" d="M82 47h-4"/><g transform="translate(18 53)"><circle class="ldr-fxl" r="7.5"/><path class="ldr-pw ldr-fxo" stroke-width="2" d="M-5 0H5M0-5V5"/></g><g transform="translate(65 53)"><circle class="ldr-fxl" r="7.5"/><path class="ldr-pw ldr-fxo" stroke-width="2" d="M-5 0H5M0-5V5"/></g></g></g></g><g class="ldr-s ldr-s3"><path d="M50 90Q58 64 70 66L120 80M0 45H41M9 46V90M33 46V90"/><g transform="translate(20 44)"><g class="ldr-bx"><g class="ldr-by"><g class="ldr-br"><circle cx="-17" cy="-10" r="7.4"/><circle cx="17" cy="-10" r="7.4"/><circle class="ldr-bw" cx="-17" cy="-10" r="9.6"/><circle class="ldr-bw" cx="17" cy="-10" r="9.6"/><path stroke-width="2" d="M-14-24l8-1M-9-24v3M4-34h7"/><path stroke-width="3.6" d="M7-33L17-10"/><path class="ldr-fxo" d="M-17-10L-3-9L9-26L8-29L-9-21L-3-9M-17-10L-8-19"/><path stroke-width="3" d="M-6-17L2-18"/></g></g></g></g></g><g class="ldr-s ldr-s4"><rect x="28" y="8" width="64" height="74" rx="6"/><rect x="36" y="15" width="30" height="10" rx="2" stroke-width="2"/><rect class="ldr-kb ldr-fxf" x="39" y="18" width="24" height="4"/><circle class="ldr-fxl" cx="75" cy="20" r="2.5"/><circle class="ldr-fxf" cx="83" cy="20" r="2.5"/><rect x="36" y="32" width="48" height="42" rx="3" stroke-width="2"/><rect class="ldr-fxl" x="53" y="32" width="14" height="8" rx="2"/><path class="ldr-ks ldr-fxo" d="M60 40V71"/><path class="ldr-kf ldr-fxf" d="M51.5 57h17l-1.5 12q-.5 3-3 3h-8q-2.5 0-3-3z"/><path d="M50 55h20l-2 14q-.5 4-4 4h-8q-3.5 0-4-4zM69.5 58q6 0 5.5 5q-.5 4-6.5 4"/></g></svg>
     <div class="ex-prog-title" id="ex-prog-title">Rendering…</div>
     <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="ex-bar-wrap"><i id="ex-bar"></i></div>
     <div class="ex-prog-sub" id="ex-prog-sub"></div>
-    <p class="ex-prog-note">Keep Fixframe open and the screen on until it finishes.</p>
+    <p class="ex-prog-note">Keep Fixframe open and in front until it finishes. On a laptop, the browser slows it down a lot while you use another tab or window.</p>
     <button class="btn" id="ex-cancel">Cancel</button>
   </div>
   <div class="ex-result" id="ex-result" hidden>
@@ -805,7 +808,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 <script>
 'use strict';
 /* Fixframe — turn a repair video into a step-by-step guide. Videos and project data are processed locally in the browser. */
-const APP_VERSION = '1.5.0';
+const APP_VERSION = '1.5.4';
 const PRIVACY_TEXT = "Your videos and project data are processed locally in this browser. Fixframe does not upload them to its server. Files leave the app only when you choose to save, download, export or share them."; // from src/privacy.txt
 const EDIT_FILE_TEXT = 'It does not contain the full video. It contains project information and a small preview image for each source video.';
 const IS_FRAMED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
@@ -820,6 +823,14 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/* Let the page breathe without a timer (timers are slowed to about once a second in background tabs). */
+const yieldNow = (() => {
+  if (typeof MessageChannel === 'undefined') return () => sleep(0);
+  const ch = new MessageChannel();
+  const q = [];
+  ch.port1.onmessage = () => { const r = q.shift(); if (r) r(); };
+  return () => new Promise((r) => { q.push(r); ch.port2.postMessage(0); });
+})();
 const uid = (p) => (p || '') + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
 function h(tag, props, ...kids) {
@@ -2853,6 +2864,287 @@ function openBrandSettings(onClose) {
   Modal.open(body, { full: true, title: 'Brand & safety', onClose: () => { saveText.flush(); if (onClose) onClose(); } });
 }
 
+/* Fast frames for exports: MP4 / MOV / 3GP files are read and decoded in order with WebCodecs, instead of
+   seeking the <video> element once per frame (each seek makes the browser decode again from the last key frame,
+   which is very slow for long or high-resolution videos and almost stops when the tab is in the background).
+   Anything this reader cannot handle returns null, and the export uses the <video> element as before. */
+const FrameReader = (() => {
+  const fcc = (u8, o) => String.fromCharCode(u8[o], u8[o + 1], u8[o + 2], u8[o + 3]);
+  const hex2 = (n) => n.toString(16).padStart(2, '0');
+
+  function boxes(u8, s, e, cb) {
+    const dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+    let o = s;
+    while (o + 8 <= e) {
+      let size = dv.getUint32(o);
+      const type = fcc(u8, o + 4);
+      let head = 8;
+      if (size === 1) { size = dv.getUint32(o + 8) * 4294967296 + dv.getUint32(o + 12); head = 16; }
+      else if (size === 0) size = e - o;
+      if (size < head || o + size > e) break;
+      cb(type, o + head, o + size, dv);
+      o += size;
+    }
+  }
+
+  /* Find the top-level 'moov' box without reading the whole file (it may sit at the end). */
+  async function readMoov(blob) {
+    let o = 0;
+    let fragmented = false;
+    let moov = null;
+    for (let guard = 0; o + 8 <= blob.size && guard < 10000; guard++) {
+      const h = new Uint8Array(await blob.slice(o, o + 16).arrayBuffer());
+      if (h.length < 8) break;
+      const dv = new DataView(h.buffer);
+      let size = dv.getUint32(0);
+      const type = fcc(h, 4);
+      if (guard === 0 && !['ftyp', 'moov', 'mdat', 'wide', 'free', 'skip', 'pnot'].includes(type)) return null;
+      if (size === 1) size = dv.getUint32(8) * 4294967296 + dv.getUint32(12);
+      else if (size === 0) size = blob.size - o;
+      if (size < 8) return null;
+      if (type === 'moov') {
+        if (size > 256 * 1048576) return null;
+        moov = new Uint8Array(await blob.slice(o, o + size).arrayBuffer());
+      } else if (type === 'moof') fragmented = true;
+      o += size;
+    }
+    return moov && !fragmented ? moov : null;
+  }
+
+  function codecString(type, cfg) {
+    const c = cfg.data;
+    if ((type === 'avc1' || type === 'avc3') && cfg.type === 'avcC' && c.length > 4) return `avc1.${hex2(c[1])}${hex2(c[2])}${hex2(c[3])}`;
+    if ((type === 'hvc1' || type === 'hev1') && cfg.type === 'hvcC' && c.length > 13) {
+      const space = ['', 'A', 'B', 'C'][c[1] >> 6];
+      const tier = c[1] & 0x20 ? 'H' : 'L';
+      const prof = c[1] & 0x1f;
+      let compat = ((c[2] << 24) | (c[3] << 16) | (c[4] << 8) | c[5]) >>> 0;
+      let rev = 0;
+      for (let i = 0; i < 32; i++) { rev = (rev << 1) | (compat & 1); compat >>>= 1; }
+      const cons = Array.from(c.subarray(6, 12));
+      while (cons.length && !cons[cons.length - 1]) cons.pop();
+      return `${type}.${space}${prof}.${(rev >>> 0).toString(16)}.${tier}${c[12]}${cons.map((b) => '.' + b.toString(16)).join('')}`;
+    }
+    if (type === 'vp09' && cfg.type === 'vpcC' && c.length > 7) return `vp09.${String(c[4]).padStart(2, '0')}.${String(c[5]).padStart(2, '0')}.${String(c[6] >> 4).padStart(2, '0')}`;
+    if (type === 'av01' && cfg.type === 'av1C' && c.length > 3) {
+      const bits = c[2] & 0x40 ? (c[2] & 0x20 ? 12 : 10) : 8;
+      return `av01.${c[1] >> 5}.${String(c[1] & 0x1f).padStart(2, '0')}${c[2] & 0x80 ? 'H' : 'M'}.${String(bits).padStart(2, '0')}`;
+    }
+    return null;
+  }
+
+  /* First video track: codec, decoder description, display rotation and every sample with its times. */
+  function parseTrack(moov) {
+    let track = null;
+    let movieScale = 1000;
+    boxes(moov, 8, moov.length, (type, a, b, dv) => {
+      if (type === 'mvhd') movieScale = dv.getUint32(a + (moov[a] === 1 ? 20 : 12)) || 1000;
+      if (type !== 'trak' || track) return;
+      const t = {};
+      const walk = (s, e) => boxes(moov, s, e, (ty, x, y, d) => {
+        if (['mdia', 'minf', 'stbl', 'edts'].includes(ty)) walk(x, y);
+        else if (ty === 'tkhd') {
+          const v1 = moov[x] === 1;
+          const m = x + (v1 ? 52 : 40);
+          t.matrix = [d.getInt32(m) / 65536, d.getInt32(m + 4) / 65536, d.getInt32(m + 12) / 65536, d.getInt32(m + 16) / 65536];
+        } else if (ty === 'elst') {
+          const v1 = moov[x] === 1;
+          const n = d.getUint32(x + 4);
+          let o = x + 8;
+          for (let i = 0; i < n; i++) {
+            const mt = v1 ? d.getInt32(o + 8) * 4294967296 + d.getUint32(o + 12) : d.getInt32(o + 4);
+            const segDur = v1 ? d.getUint32(o) * 4294967296 + d.getUint32(o + 4) : d.getUint32(o);
+            if (mt === -1) { t.emptyEdit = (t.emptyEdit || 0) + segDur; }
+            else if (t.mediaTime == null) t.mediaTime = mt;
+            else t.multiEdit = true;
+            o += v1 ? 20 : 12;
+          }
+        } else if (ty === 'mdhd') t.scale = d.getUint32(x + (moov[x] === 1 ? 20 : 12));
+        else if (ty === 'hdlr' && !t.handler) t.handler = fcc(moov, x + 8);
+        else if (ty === 'stsd') {
+          const e0 = x + 8;
+          t.entries = d.getUint32(x + 4);
+          t.type = fcc(moov, e0 + 4);
+          t.codedW = d.getUint16(e0 + 32);
+          t.codedH = d.getUint16(e0 + 34);
+          boxes(moov, e0 + 86, e0 + d.getUint32(e0), (ct, ca, cb) => {
+            if (['avcC', 'hvcC', 'vpcC', 'av1C'].includes(ct) && !t.cfg) t.cfg = { type: ct, data: moov.slice(ca, cb) };
+            if (ct === 'pasp' && d.getUint32(ca) !== d.getUint32(ca + 4)) t.nonSquare = true;
+            if (ct === 'colr') t.colr = true;
+          });
+        } else if (ty === 'stts') { const n = d.getUint32(x + 4); t.stts = []; for (let i = 0; i < n; i++) t.stts.push([d.getUint32(x + 8 + i * 8), d.getUint32(x + 12 + i * 8)]); }
+        else if (ty === 'ctts') { const v1 = moov[x] === 1; const n = d.getUint32(x + 4); t.ctts = []; for (let i = 0; i < n; i++) t.ctts.push([d.getUint32(x + 8 + i * 8), v1 ? d.getInt32(x + 12 + i * 8) : d.getUint32(x + 12 + i * 8)]); }
+        else if (ty === 'stss') { const n = d.getUint32(x + 4); t.stss = new Set(); for (let i = 0; i < n; i++) t.stss.add(d.getUint32(x + 8 + i * 4) - 1); }
+        else if (ty === 'stsc') { const n = d.getUint32(x + 4); t.stsc = []; for (let i = 0; i < n; i++) t.stsc.push([d.getUint32(x + 8 + i * 12), d.getUint32(x + 12 + i * 12)]); }
+        else if (ty === 'stsz') { const fixed = d.getUint32(x + 4); const n = d.getUint32(x + 8); t.sizes = new Array(n); for (let i = 0; i < n; i++) t.sizes[i] = fixed || d.getUint32(x + 12 + i * 4); }
+        else if (ty === 'stco') { const n = d.getUint32(x + 4); t.chunks = []; for (let i = 0; i < n; i++) t.chunks.push(d.getUint32(x + 8 + i * 4)); }
+        else if (ty === 'co64') { const n = d.getUint32(x + 4); t.chunks = []; for (let i = 0; i < n; i++) t.chunks.push(d.getUint32(x + 8 + i * 8) * 4294967296 + d.getUint32(x + 12 + i * 8)); }
+      });
+      walk(a, b);
+      if (t.handler === 'vide') track = t;
+    });
+    const t = track;
+    if (!t || !t.cfg || !t.sizes || !t.chunks || !t.stsc || !t.stts || !t.scale || t.entries !== 1 || t.nonSquare || t.multiEdit) return null;
+    const codec = codecString(t.type, t.cfg);
+    if (!codec) return null;
+    const n = t.sizes.length;
+    const samples = new Array(n);
+    let si = 0;
+    for (let c = 0; c < t.chunks.length && si < n; c++) {
+      let per = 0;
+      for (const [first, k] of t.stsc) if (c + 1 >= first) per = k;
+      let off = t.chunks[c];
+      for (let k = 0; k < per && si < n; k++, si++) { samples[si] = { off, size: t.sizes[si] }; off += t.sizes[si]; }
+    }
+    if (si < n) return null;
+    let dts = 0;
+    let i = 0;
+    for (const [count, delta] of t.stts) for (let k = 0; k < count && i < n; k++, i++) { samples[i].dts = dts; samples[i].d = delta / t.scale; dts += delta; }
+    if (i < n) return null;
+    i = 0;
+    if (t.ctts) for (const [count, off] of t.ctts) for (let k = 0; k < count && i < n; k++, i++) samples[i].cto = off;
+    // Times as the <video> element shows them: the edit list moves the start, an empty edit delays it.
+    const shift = (t.mediaTime || 0) - ((t.emptyEdit || 0) / movieScale) * t.scale;
+    for (let k = 0; k < n; k++) {
+      const s = samples[k];
+      s.key = t.stss ? t.stss.has(k) : true;
+      s.pts = (s.dts + (s.cto || 0) - shift) / t.scale;
+    }
+    const [ma, mb] = t.matrix || [1, 0, 0, 1];
+    const rot = ((Math.round((Math.atan2(mb, ma) * 180) / Math.PI / 90) * 90) % 360 + 360) % 360;
+    return { colr: !!t.colr, codec, description: t.cfg.type === 'avcC' || t.cfg.type === 'hvcC' ? t.cfg.data : undefined, codedW: t.codedW, codedH: t.codedH, rot, samples };
+  }
+
+  class Reader {
+    constructor(blob, tr, config) {
+      this.blob = blob;
+      this.tr = tr;
+      this.config = config;
+      this.frames = [];
+      this.cur = null;
+      this.err = null;
+      this.wake = null;
+      this.first = Math.min(...tr.samples.slice(0, 64).map((s) => s.pts));
+      this.makeDecoder();
+    }
+    makeDecoder() {
+      if (this.dec) { try { this.dec.close(); } catch (e) { /* ignore */ } }
+      this.err = null;
+      this.dec = new VideoDecoder({
+        output: (f) => { this.frames.push(f); this.poke(); },
+        error: (e) => { this.err = e; this.poke(); },
+      });
+      this.dec.configure(this.config);
+      this.hasDequeue = 'ondequeue' in this.dec;
+      if (this.hasDequeue) this.dec.ondequeue = () => this.poke();
+    }
+    poke() { const w = this.wake; this.wake = null; if (w) w(); }
+    waitEvent() {
+      return new Promise((r) => {
+        this.wake = r;
+        if (!this.hasDequeue) yieldNow().then(() => this.poke()); // browsers without the dequeue event
+      });
+    }
+    keyBefore(t) {
+      const S = this.tr.samples;
+      let k = 0;
+      for (let i = 0; i < S.length; i++) { if (S[i].key && S[i].pts <= t + 1e-4) k = i; if (S[i].pts > t + 5) break; }
+      return k;
+    }
+    /* Start decoding again at sample k (a key frame). */
+    restart(k) {
+      this.frames.forEach((f) => f.close());
+      this.frames = [];
+      if (this.cur) { this.cur.close(); this.cur = null; }
+      if (this.err || this.dec.state === 'closed') this.makeDecoder();
+      else { this.dec.reset(); this.dec.configure(this.config); }
+      this.feedAt = k;
+      this.finished = false;
+    }
+    async feedOne() {
+      const s = this.tr.samples[this.feedAt];
+      const data = new Uint8Array(await this.blob.slice(s.off, s.off + s.size).arrayBuffer());
+      this.dec.decode(new EncodedVideoChunk({ type: s.key ? 'key' : 'delta', timestamp: Math.round(s.pts * 1e6), duration: Math.round(s.d * 1e6), data }));
+      this.feedAt++;
+    }
+    /* The frame the <video> element would show at time t: the last one that starts at or before t. */
+    async frameAt(t) {
+      t = Math.max(t, this.first);
+      const tu = Math.round(t * 1e6) + 500;
+      const S = this.tr.samples;
+      const pos = this.cur ? this.cur.timestamp : -Infinity;
+      if (pos > tu) this.restart(this.keyBefore(t));
+      else if (tu - Math.max(pos, this.feedAt < S.length ? S[this.feedAt].pts * 1e6 - 1e6 : pos) > 3e6) {
+        const k = this.keyBefore(t);
+        if (k > this.feedAt) this.restart(k);
+      }
+      for (;;) {
+        if (this.err) throw this.err;
+        while (this.frames.length && this.frames[0].timestamp <= tu) {
+          if (this.cur) this.cur.close();
+          this.cur = this.frames.shift();
+        }
+        if (this.frames.length || this.finished) break;
+        if (this.feedAt < S.length) {
+          if (this.dec.decodeQueueSize < 6) await this.feedOne();
+          else await this.waitEvent();
+        } else {
+          await this.dec.flush();
+          this.finished = true;
+        }
+      }
+      if (!this.cur && this.frames.length) this.cur = this.frames.shift(); // t before the first frame
+      if (!this.cur) throw new Error('No frame decoded');
+      return this.view();
+    }
+    view() {
+      const f = this.cur;
+      const rot = this.tr.rot;
+      const w = f.displayWidth;
+      const h = f.displayHeight;
+      return {
+        videoWidth: rot % 180 ? h : w,
+        videoHeight: rot % 180 ? w : h,
+        drawTo(ctx, x, y, dw, dh) {
+          if (!rot) { ctx.drawImage(f, x, y, dw, dh); return; }
+          ctx.save();
+          ctx.translate(x + dw / 2, y + dh / 2);
+          ctx.rotate((rot * Math.PI) / 180);
+          if (rot % 180) ctx.drawImage(f, -dh / 2, -dw / 2, dh, dw);
+          else ctx.drawImage(f, -dw / 2, -dh / 2, dw, dh);
+          ctx.restore();
+        },
+      };
+    }
+    close() {
+      this.frames.forEach((f) => f.close());
+      this.frames = [];
+      if (this.cur) { this.cur.close(); this.cur = null; }
+      try { if (this.dec.state !== 'closed') this.dec.close(); } catch (e) { /* ignore */ }
+    }
+  }
+
+  async function open(blob) {
+    if (window.__ffNoFastFrames || typeof VideoDecoder === 'undefined' || typeof EncodedVideoChunk === 'undefined' || !blob) return null;
+    try {
+      const moov = await readMoov(blob);
+      if (!moov) return null;
+      const tr = parseTrack(moov);
+      if (!tr || !tr.samples.length) return null;
+      const config = { codec: tr.codec, codedWidth: tr.codedW, codedHeight: tr.codedH, optimizeForLatency: false };
+      if (tr.description) config.description = tr.description;
+      // Untagged SD video: the <video> element treats it as BT.601, so do the same (HD defaults to BT.709 anyway).
+      if (!tr.colr && Math.max(tr.codedW, tr.codedH) < 1280 && Math.min(tr.codedW, tr.codedH) < 720) config.colorSpace = { primaries: 'smpte170m', transfer: 'smpte170m', matrix: 'smpte170m', fullRange: false };
+      const sup = await VideoDecoder.isConfigSupported(config).catch(() => null);
+      if (!sup || !sup.supported) return null;
+      const r = new Reader(blob, tr, config);
+      r.restart(0);
+      return r;
+    } catch (e) { return null; }
+  }
+  return { open, parseTrack, readMoov };
+})();
+
 /* Picture markup: arrows, info boxes (with optional pointer), circles, frames, numbers.
    Coordinates are stored 0..1 relative to the picture; sizes scale with the picture. */
 const ANN_COLORS = ['#FF3B30', '#FFCC00', '#E75B12', '#34C759', '#0A84FF', '#FFFFFF', '#111111'];
@@ -3913,7 +4205,8 @@ function drawClipFrame(ctx, v, seg, W, H, opts) {
   ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, W, H);
   const r = fitRect(v.videoWidth || W, v.videoHeight || H, W, H);
-  ctx.drawImage(v, r.x, r.y, r.w, r.h);
+  if (v.drawTo) v.drawTo(ctx, r.x, r.y, r.w, r.h);
+  else ctx.drawImage(v, r.x, r.y, r.w, r.h);
   if (seg.kind !== 'clip') return; // brand videos stay untouched
   if (opts.captions) drawLowerThird(ctx, W, H, xStepLabel(seg.index + 1, opts.nSteps), seg.step.title || `${xl().step} ${seg.index + 1}`);
   if ((opts.captions || opts.badge) && seg.speed !== 1) drawSpeedBadge(ctx, W, H, seg.speed, !!(opts.watermark && Brand.logo && Brand.cfg.wmPos === 'tr'));
@@ -4028,6 +4321,35 @@ async function renderTimeline({ P, segs, total, nSteps, W, H, fps, gif, sink, op
     }
     return cur;
   };
+  // Fast path: decode the clip's file in order with WebCodecs (one reader at a time, like the decoders above).
+  let reader = null;
+  let readerUrl = '';
+  const noReader = new Set();
+  const getReader = async (u) => {
+    if (u === readerUrl) return reader;
+    if (reader) { reader.close(); reader = null; }
+    readerUrl = u;
+    if (noReader.has(u)) return null;
+    try {
+      const blob = await (await fetch(u)).blob();
+      reader = await FrameReader.open(blob);
+    } catch (e) { reader = null; }
+    if (!reader) noReader.add(u);
+    return reader;
+  };
+  /* The picture of a clip at source time st: from the reader, or by seeking the <video> element. */
+  const clipFrame = async (seg, st) => {
+    const r = await getReader(seg.url);
+    if (r) {
+      try { return await r.frameAt(st); } catch (e) {
+        r.close(); reader = null; noReader.add(seg.url); readerUrl = '';
+        if (window.__ffLog) window.__ffLog('fast frames off: ' + (e && e.message));
+      }
+    }
+    const v = await getVideo(seg);
+    await seekTo(v, st);
+    return v;
+  };
   const info = { title: P.title, author: P.author, intro: P.intro, tools: lines(P.tools), nSteps, total, safety: lines(Brand.cfg.safetyText) };
   // A still of the step's own video for the stage on the title and step cards (the clip plays right after anyway).
   const stillOf = async (cs, frac) => {
@@ -4068,13 +4390,11 @@ async function renderTimeline({ P, segs, total, nSteps, W, H, fps, gif, sink, op
     if (gif) {
       for (const seg of segs) {
         if (isVideoSeg(seg)) {
-          const v = await getVideo(seg);
           const m = Math.max(1, Math.round(seg.dur * fps));
           for (let k = 0; k < m; k++) {
             checkAbort();
             const st = Math.min(seg.start + (k / fps) * seg.speed, seg.end - 0.001);
-            await seekTo(v, st);
-            drawClipFrame(ctx, v, seg, W, H, opts);
+            drawClipFrame(ctx, await clipFrame(seg, st), seg, W, H, opts);
             const ta = seg.t0 + k / fps;
             const tb = k === m - 1 ? seg.t1 : seg.t0 + (k + 1) / fps;
             await sink.addFrame(canvas, ta, tb - ta, false);
@@ -4095,6 +4415,7 @@ async function renderTimeline({ P, segs, total, nSteps, W, H, fps, gif, sink, op
       let si = 0;
       let lastSt = -1;
       let lastSeg = null;
+      let lastFrame = null;
       const keyEvery = Math.max(1, Math.round(fps * 2));
       for (let i = 0; i < totalFrames; i++) {
         checkAbort();
@@ -4103,10 +4424,9 @@ async function renderTimeline({ P, segs, total, nSteps, W, H, fps, gif, sink, op
         const seg = segs[si];
         const u = T - seg.t0;
         if (isVideoSeg(seg)) {
-          const v = await getVideo(seg);
           const st = Math.min(seg.start + u * seg.speed, seg.end - 0.001);
-          if (seg !== lastSeg || Math.abs(st - lastSt) > 1e-5) { await seekTo(v, st); lastSt = st; lastSeg = seg; }
-          drawClipFrame(ctx, v, seg, W, H, opts);
+          if (seg !== lastSeg || Math.abs(st - lastSt) > 1e-5) { lastFrame = await clipFrame(seg, st); lastSt = st; lastSeg = seg; }
+          drawClipFrame(ctx, lastFrame, seg, W, H, opts);
         } else {
           ctx.drawImage(await staticCanvas(seg), 0, 0);
         }
@@ -4123,6 +4443,7 @@ async function renderTimeline({ P, segs, total, nSteps, W, H, fps, gif, sink, op
   } finally {
     statics.forEach((c) => freeCanvas(c));
     if (cur) disposeVideo(cur);
+    if (reader) reader.close();
     freeCanvas(canvas);
   }
 }
@@ -4301,7 +4622,8 @@ class Mp4Sink {
     const frame = new VideoFrame(canvas, { timestamp: Math.round(t * 1e6), duration: Math.round(d * 1e6) });
     try { this.enc.encode(frame, { keyFrame: !!key }); } finally { frame.close(); }
     while (this.enc.encodeQueueSize > 4) {
-      await sleep(2);
+      if ('ondequeue' in this.enc) await new Promise((r) => { this.enc.addEventListener('dequeue', r, { once: true }); setTimeout(r, 250); });
+      else await yieldNow();
       if (this.err) throw this.err;
     }
   }
@@ -4375,7 +4697,7 @@ class GifSink {
     if (!fr) return; // identical to the previous frame: it simply stays on screen longer
     this.flush(t);
     this.pending = Object.assign({ t0: t }, fr);
-    await sleep(0);
+    await yieldNow();
   }
   flush(tNext) {
     const p = this.pending;
@@ -7808,7 +8130,7 @@ const Exporter = {
   },
 };
 
-/* Offline install + user-controlled updates through the service worker. */
+/* Offline install + user-controlled updates through the service worker. Nothing is checked automatically. */
 const PWA = {
   reg: null, applying: false, waitingVersion: null,
   supported() {
@@ -7825,11 +8147,13 @@ const PWA = {
       if (!w) return;
       w.addEventListener('statechange', () => { if (w.state === 'installed' && navigator.serviceWorker.controller) this.onWaiting(w); });
     });
-    setTimeout(() => this.check(), 5000);
+    // No automatic update check: Fixframe looks for a new version only when the user taps "Check for updates".
   },
   async check() {
     if (!this.reg) return 'unsupported';
     if (navigator.onLine === false) return 'offline';
+    // Tell the service worker that this update was asked for (it refuses updates the browser starts on its own).
+    try { const c = await caches.open('fixframe-flags'); await c.put('./update-ok', new Response(String(Date.now()))); } catch (e) { /* older browsers: still try */ }
     try { await this.reg.update(); } catch (e) { return 'offline'; }
     const inst = this.reg.installing;
     if (inst) {
@@ -8229,6 +8553,8 @@ function ffNormCode(input) {
   for (const ch of s.slice(2)) if (!FF_ALPHABET.includes(ch)) return '';
   return s;
 }
+/* FX-ABCD-2345 -> FX-····-2345: only the last 4 characters are shown. */
+function ffMaskCode(norm) { return `FX-\u00b7\u00b7\u00b7\u00b7-${norm.slice(6)}`; }
 function ffShowCode(norm) { return `${norm.slice(0, 2)}-${norm.slice(2, 6)}-${norm.slice(6)}`; }
 function ffRandomCode() {
   const n = FF_ALPHABET.length;
@@ -8357,7 +8683,7 @@ const Access = {
   ex: { count: 0, total: 0, unlocks: 0, req: null },
   note: '',
   linkCode: '',
-  gateEl: null, gateMode: '', gateDone: null, lastFetch: 0,
+  gateEl: null, gateMode: '', gateDone: null, lastFetch: 0, checkedAt: 0,
   VIDEO_FORMATS: ['mp4', 'gif'],
 
   async load() {
@@ -8365,6 +8691,7 @@ const Access = {
       const s = await Store.getBlob('cfg:access');
       if (!s || typeof s !== 'object' || s instanceof Blob) return;
       this.known = !!s.known;
+      this.checkedAt = +s.checkedAt || 0;
       this.cfg = s.cfg ? this.clean(s.cfg) : null;
       if (s.st && typeof s.st.fp === 'string') this.st = { fp: s.st.fp, n: +s.st.n || 0, at: +s.st.at || 0 };
       if (s.ex && typeof s.ex === 'object') {
@@ -8376,7 +8703,7 @@ const Access = {
       }
     } catch (e) { /* start without stored access data */ }
   },
-  save() { return Store.putBlob('cfg:access', { known: this.known, cfg: this.cfg, st: this.st, ex: this.ex }).catch(() => {}); },
+  save() { return Store.putBlob('cfg:access', { known: this.known, checkedAt: this.checkedAt, cfg: this.cfg, st: this.st, ex: this.ex }).catch(() => {}); },
 
   /* Copy field by field: the file is edited by hand. Returns null when it switches nothing on. */
   clean(j) {
@@ -8389,7 +8716,8 @@ const Access = {
     const unlock = salt ? hex(j.unlock, 32, 32) : '';
     const limit = unlock ? clamp(Math.round(+(j.exportLimit != null ? j.exportLimit : j.limit) || 0), 0, 100000) : 0;
     if (!gate && !limit) return null;
-    return { gate, salt, rounds, codes, unlock, limit, contact: typeof j.contact === 'string' ? j.contact.trim().slice(0, 200) : '' };
+    const recheck = clamp(Math.round(j.recheckDays != null && isFinite(+j.recheckDays) ? +j.recheckDays : 7), 0, 365);
+    return { gate, salt, rounds, codes, unlock, limit, recheck, contact: typeof j.contact === 'string' ? j.contact.trim().slice(0, 200) : '' };
   },
   async fetchConfig(ms) {
     const ctl = new AbortController();
@@ -8406,8 +8734,8 @@ const Access = {
     } catch (e) { return { state: 'error' }; } finally { clearTimeout(timer); }
   },
   apply(r) {
-    if (r.state === 'on') { this.cfg = r.cfg; this.known = true; this.note = ''; }
-    else if (r.state === 'off') { this.cfg = null; this.known = true; this.note = ''; }
+    if (r.state === 'on') { this.cfg = r.cfg; this.known = true; this.note = ''; this.checkedAt = Date.now(); }
+    else if (r.state === 'off') { this.cfg = null; this.known = true; this.note = ''; this.checkedAt = Date.now(); }
     else if (r.state === 'invalid') this.note = 'The file access.json on the website could not be read. Check it for a typing mistake.';
   },
 
@@ -8438,12 +8766,16 @@ const Access = {
   async start() {
     this.readLink();
     await this.load();
-    if (this.known) this.refresh();
-    else { this.apply(await this.fetchConfig(6000)); await this.save(); }
-    document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - this.lastFetch > 3600000) this.refresh(); });
+    if (!this.known) { this.apply(await this.fetchConfig(6000)); await this.save(); }
+    else if (this.need() === 'enter' || this.due()) this.refresh();
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && this.due() && Date.now() - this.lastFetch > 3600000) this.refresh(); });
     const need = this.need();
     if (need) await this.showGate(need);
   },
+  /* Few contacts: the list is read again only every few days (access.json "recheckDays", 7 when missing;
+     0 = only while an invitation code is being entered). */
+  days() { return this.cfg ? this.cfg.recheck : 7; },
+  due() { const d = this.days(); return d > 0 && Date.now() - this.checkedAt > d * 86400000; },
   /* Reads access.json again in the background, so a blocked code stops and a new list arrives. */
   async refresh() {
     const before = this.need();
@@ -8489,9 +8821,13 @@ const Access = {
       id: 'gate-code', class: 'gate-code', type: 'text', placeholder: 'FX-XXXX-XXXX', maxlength: '16', 'aria-label': 'Invitation code',
       autocomplete: 'off', autocapitalize: 'characters', autocorrect: 'off', spellcheck: 'false', enterkeyhint: 'go',
     });
+    // A code that came with the invitation link is kept out of sight: only its last 4 characters are shown.
     const linked = ffNormCode(this.linkCode);
-    if (linked) input.value = ffShowCode(linked);
+    const masked = linked ? ffMaskCode(linked) : '';
+    if (masked) { input.value = masked; input.dataset.masked = '1'; }
+    input.addEventListener('focus', () => { if (input.dataset.masked) input.select(); });
     input.addEventListener('input', (e) => {
+      if (input.dataset.masked) delete input.dataset.masked; // typing replaces the linked code
       // group the characters while typing at the end; leave the text alone while correcting in the middle
       if (e.inputType && e.inputType.startsWith('delete')) return;
       if (input.selectionStart !== input.value.length) return;
@@ -8525,8 +8861,7 @@ const Access = {
         return state === 'error' ? 'No connection to the website right now. Try again when you are online.' : 'This code is still not on the list.';
       }));
     }
-    const form = h('form', { class: 'gate-form', onSubmit: (e) => { e.preventDefault(); run(() => this.submit(input.value)); } }, input, go);
-    const contact = this.cfg && this.cfg.contact;
+    const form = h('form', { class: 'gate-form', onSubmit: (e) => { e.preventDefault(); run(() => this.submit(input.dataset.masked && input.value === masked ? linked : input.value)); } }, input, go);
     const wipe = h('button', { class: 'gate-link', id: 'gate-wipe', type: 'button', onClick: () => wipeEverything() }, 'Delete Fixframe data on this device');
     setKids(this.gateEl, h('div', { class: 'gate-in' },
       $('.home-bar .brand').cloneNode(true),
@@ -8535,7 +8870,7 @@ const Access = {
         ? 'The invitation code used on this device is no longer on the list. Your guides are kept. Enter a new code to continue.'
         : 'Fixframe is by invitation. Enter your personal invitation code to start.'),
       form, msg, again,
-      contact ? h('p', { class: 'gate-contact' }, h('b', null, 'No code? '), contact) : null,
+      h('p', { class: 'gate-contact' }, h('b', null, 'No code? '), 'Contact the owner of this app.'),
       IS_IOS && !IS_STANDALONE ? h('p', { class: 'gate-hint' }, 'On iPhone and iPad: first tap Share, then “Add to Home Screen”, and enter the code in the installed app. Safari and the installed app do not share their data.') : null,
       h('div', { class: 'gate-update' }, h('span', null, 'An update is ready.'), h('button', { class: 'btn small accent', type: 'button', onClick: () => PWA.apply() }, 'Install')),
       h('div', { class: 'gate-foot' },
@@ -8596,11 +8931,6 @@ const Access = {
     }
     return this.ex.req;
   },
-  requestText(req) {
-    const d = new Date(req.at);
-    return `Fixframe unlock request ${ffRequestId(req.n, req.ddmm, req.yyhh)}`
-      + ` (invitation #${req.n}, ${ff2(d.getDate())}.${ff2(d.getMonth() + 1)}.${d.getFullYear()} ${ff2(d.getHours())} h, ${this.ex.total} video exports so far, app ${APP_VERSION})`;
-  },
   async tryUnlock(raw) {
     const d = String(raw || '').replace(/\D/g, '');
     const cfg = this.cfg;
@@ -8635,16 +8965,6 @@ const Access = {
       });
       const msg = h('p', { class: 'gate-msg', id: 'unlock-msg', role: 'status', 'aria-live': 'polite' });
       const ok = h('button', { type: 'submit', class: 'btn primary' }, 'Unlock');
-      const send = h('button', { type: 'button', class: 'btn small', id: 'unlock-send' }, icon('share'), 'Send request');
-      send.addEventListener('click', async () => {
-        const text = this.requestText(req);
-        try {
-          if (navigator.share) { await navigator.share({ text }); return; }
-        } catch (e) { if (e && e.name === 'AbortError') return; }
-        try { await navigator.clipboard.writeText(text); toast('Request copied. Paste it into a message.'); }
-        catch (e) { toast(`Send this number: ${id}`, '', 6000); }
-      });
-      const contact = this.cfg && this.cfg.contact;
       const body = h('form', {
         class: 'dlg', id: 'unlock-form',
         onSubmit: async (e) => {
@@ -8663,10 +8983,9 @@ const Access = {
       },
         h('h3', { class: 'dlg-title' }, 'Unlock code'),
         h('p', { class: 'dlg-msg' }, used >= limit
-          ? `You have made ${plural(used, 'video export')}. To make the next ${limit}, send this request number to ${contact ? 'your contact' : 'the person who invited you'} and enter the code you get back.`
-          : `${used} of ${limit} video exports are used. You can get the next unlock code now: send this request number and enter the code you get back.`),
-        h('div', { class: 'unlock-req' }, h('span', { class: 'label' }, 'Request number'), h('b', { id: 'unlock-req' }, id), send),
-        contact ? h('p', { class: 'hint' }, contact) : null,
+          ? `You have made ${plural(used, 'video export')}. To make the next ${limit}, contact the owner of this app, give them this request number and enter the code you get back.`
+          : `${used} of ${limit} video exports are used. You can get the next unlock code now: contact the owner of this app, give them this request number and enter the code you get back.`),
+        h('div', { class: 'unlock-req' }, h('span', { class: 'label' }, 'Request number'), h('b', { id: 'unlock-req' }, id)),
         input, msg,
         h('div', { class: 'dlg-actions' },
           h('button', { type: 'button', class: 'btn', onClick: () => m.close(false) }, 'Later'), ok),
@@ -8694,7 +9013,11 @@ const Access = {
       rows.push(h('div', { class: 'set-row' }, h('span', null, 'Video exports'), h('span', { class: 'set-val', id: 'set-exports' }, `${Math.min(this.ex.count, L)} of ${L} used`)));
       rows.push(h('p', null, `After ${L} video exports (MP4 or GIF) the app asks for an unlock code. Editing and PDF, Word and HTML guides are not counted.`));
     }
-    if (this.cfg && this.cfg.gate) rows.push(h('p', { id: 'set-access-text' }, ACCESS_TEXT));
+    if (this.cfg && this.cfg.gate) {
+      rows.push(h('p', { id: 'set-access-text' }, ACCESS_TEXT));
+      const d = this.days();
+      rows.push(h('p', { id: 'set-access-check' }, d ? `It looks at the list again only every ${d === 1 ? 'day' : `${d} days`}, when the app is opened with a connection.` : 'It looked at the list when the code was entered and does not look again.'));
+    }
     const btns = [];
     if (L && this.ex.count > 0) btns.push(h('button', { class: 'btn small', id: 'set-unlock', type: 'button', onClick: () => { closeSettings(); this.askUnlock(); } }, 'Enter unlock code'));
     if (this.cfg && this.cfg.gate && this.st) {
