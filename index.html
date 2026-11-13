@@ -808,7 +808,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 <script>
 'use strict';
 /* Fixframe — turn a repair video into a step-by-step guide. Videos and project data are processed locally in the browser. */
-const APP_VERSION = '1.5.5';
+const APP_VERSION = '1.5.6';
 const PRIVACY_TEXT = "Your videos and project data are processed locally in this browser. Fixframe does not upload them to its server. Files leave the app only when you choose to save, download, export or share them."; // from src/privacy.txt
 const EDIT_FILE_TEXT = 'It does not contain the full video. It contains project information and a small preview image for each source video.';
 const IS_FRAMED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
@@ -2973,7 +2973,8 @@ const FrameReader = (() => {
             if (ct === 'colr') t.colr = true;
           });
         } else if (ty === 'stts') { const n = d.getUint32(x + 4); t.stts = []; for (let i = 0; i < n; i++) t.stts.push([d.getUint32(x + 8 + i * 8), d.getUint32(x + 12 + i * 8)]); }
-        else if (ty === 'ctts') { const v1 = moov[x] === 1; const n = d.getUint32(x + 4); t.ctts = []; for (let i = 0; i < n; i++) t.ctts.push([d.getUint32(x + 8 + i * 8), v1 ? d.getInt32(x + 12 + i * 8) : d.getUint32(x + 12 + i * 8)]); }
+        else if (ty === 'ctts') { const n = d.getUint32(x + 4); // offsets read as signed: QuickTime and iPhone files store negative ones even with version 0
+          t.ctts = []; for (let i = 0; i < n; i++) t.ctts.push([d.getUint32(x + 8 + i * 8), d.getInt32(x + 12 + i * 8)]); }
         else if (ty === 'stss') { const n = d.getUint32(x + 4); t.stss = new Set(); for (let i = 0; i < n; i++) t.stss.add(d.getUint32(x + 8 + i * 4) - 1); }
         else if (ty === 'stsc') { const n = d.getUint32(x + 4); t.stsc = []; for (let i = 0; i < n; i++) t.stsc.push([d.getUint32(x + 8 + i * 12), d.getUint32(x + 12 + i * 12)]); }
         else if (ty === 'stsz') { const fixed = d.getUint32(x + 4); const n = d.getUint32(x + 8); t.sizes = new Array(n); for (let i = 0; i < n; i++) t.sizes[i] = fixed || d.getUint32(x + 12 + i * 4); }
@@ -3024,14 +3025,24 @@ const FrameReader = (() => {
       this.cur = null;
       this.err = null;
       this.wake = null;
-      this.first = Math.min(...tr.samples.slice(0, 64).map((s) => s.pts));
+      // Every frame time in showing order: frameAt() asks for exactly the frame that this table puts on screen.
+      this.times = Float64Array.from(tr.samples, (s) => s.pts).sort();
+      this.first = this.times[0];
+      const durs = Float64Array.from(tr.samples, (s) => s.d || 0).sort();
+      this.tol = Math.round(Math.max(0.12, 3 * (durs[durs.length >> 1] || 0.04)) * 1e6);
       this.makeDecoder();
     }
     makeDecoder() {
       if (this.dec) { try { this.dec.close(); } catch (e) { /* ignore */ } }
       this.err = null;
       this.dec = new VideoDecoder({
-        output: (f) => { this.frames.push(f); this.poke(); },
+        output: (f) => {
+          // kept in showing order, also for decoders that hand frames out in decoding order
+          let i = this.frames.length;
+          while (i > 0 && this.frames[i - 1].timestamp > f.timestamp) i--;
+          this.frames.splice(i, 0, f);
+          this.poke();
+        },
         error: (e) => { this.err = e; this.poke(); },
       });
       this.dec.configure(this.config);
@@ -3082,25 +3093,38 @@ const FrameReader = (() => {
       this.dec.decode(new EncodedVideoChunk({ type: s.key ? 'key' : 'delta', timestamp: Math.round(s.pts * 1e6), duration: Math.round(s.d * 1e6), data }));
       this.feedAt++;
     }
+    /* Time stamp (µs) of the frame that is on screen at time t, from the file's own table. */
+    expectTs(t) {
+      const T = this.times;
+      let lo = 0;
+      let hi = T.length - 1;
+      while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (T[mid] <= t + 0.0005) lo = mid; else hi = mid - 1; }
+      return Math.round(T[lo] * 1e6);
+    }
     /* The frame the <video> element would show at time t: the last one that starts at or before t. */
     async frameAt(t) {
       t = Math.max(t, this.first);
-      const tu = Math.round(t * 1e6) + 500;
+      const E = this.expectTs(t);
       const S = this.tr.samples;
       const pos = this.cur ? this.cur.timestamp : -Infinity;
-      if (pos > tu) this.restart(this.keyBefore(t));
-      else if (tu - Math.max(pos, this.feedAt < S.length ? S[this.feedAt].pts * 1e6 - 1e6 : pos) > 3e6) {
+      if (pos > E + 1500) this.restart(this.keyBefore(t));
+      else if (E - Math.max(pos, this.feedAt < S.length ? S[this.feedAt].pts * 1e6 - 1e6 : pos) > 3e6) {
         const k = this.keyBefore(t);
         if (k > this.feedAt) this.restart(k);
       }
       for (;;) {
         if (this.closed) throw new Error('Reader closed');
         if (this.err) throw this.err;
-        while (this.frames.length && this.frames[0].timestamp <= tu) {
+        // 1.5 ms of slack: some decoders give the time stamps back slightly rounded
+        while (this.frames.length && this.frames[0].timestamp <= E + 1500) {
           if (this.cur) this.cur.close();
           this.cur = this.frames.shift();
         }
-        if (this.frames.length || this.finished) break;
+        if (this.cur && Math.abs(this.cur.timestamp - E) <= 1500) break;
+        // Not there yet. Later frames alone do not end the wait (a decoder may hand frames out of order);
+        // 8 later frames, or one that is a second ahead, do: the frame was dropped.
+        const n = this.frames.length;
+        if (this.finished || n >= 8 || (n && this.frames[n - 1].timestamp - E > 1e6)) break;
         if (this.feedAt < S.length) {
           if (this.dec.decodeQueueSize < 6) await this.feedOne();
           else await this.waitEvent();
@@ -3109,8 +3133,10 @@ const FrameReader = (() => {
           this.finished = true;
         }
       }
-      if (!this.cur && this.frames.length) this.cur = this.frames.shift(); // t before the first frame
+      if (!this.cur && this.frames.length) this.cur = this.frames.shift();
       if (!this.cur) throw new Error('No frame decoded');
+      // A frame from the wrong moment (a stuck or confused decoder) must never go into the video.
+      if (Math.abs(this.cur.timestamp - E) > this.tol) throw new Error(`Wrong frame time (${((this.cur.timestamp - E) / 1e6).toFixed(2)} s)`);
       return this.view();
     }
     view() {

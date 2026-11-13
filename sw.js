@@ -1,5 +1,5 @@
 /* Fixframe service worker: keeps the app available offline and installs updates only when asked. It never contacts other sites. */
-const VERSION = '1.5.5';
+const VERSION = '1.5.6';
 const CACHE = `fixframe-${VERSION}`;
 const ASSETS = [
   './',

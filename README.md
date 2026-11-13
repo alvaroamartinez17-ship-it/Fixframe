@@ -50,8 +50,8 @@ After the first start the app also works offline.
 ## Releasing an update
 
 1. Change the version in **two places** and keep them identical:
-   - `index.html`: `const APP_VERSION = '1.5.5';`
-   - `sw.js`: `const VERSION = '1.5.5';`
+   - `index.html`: `const APP_VERSION = '1.5.6';`
+   - `sw.js`: `const VERSION = '1.5.6';`
 2. Upload the changed files to the repository.
 3. In the app: **Settings (sliders icon) → Check for updates → Install update**. Nothing happens automatically:
    each phone or laptop gets the new version only when someone taps *Check for updates* there. Guides are kept during
@@ -159,6 +159,9 @@ or *Uninstall* (Android).
   Since 1.5.1 the frames of MP4, MOV and WebM-in-MP4 files are decoded in order (WebCodecs) instead of seeking the
   video for every frame, so rendering takes roughly as long as the finished video. Fragmented MP4s and formats the
   decoder does not offer (for example HEVC in some browsers) still use the slower way.
+- 1.5.6 fixes video parts that stood still in exports of QuickTime-style videos (iPhone and many camera .MOV files):
+  their frame-order table was misread. The fast way now also checks the time of every frame it hands out and switches
+  to the careful way if a frame comes from the wrong moment.
 - Before the fast way is used for a video, Fixframe compares two of its pictures with the browser's own video player
   on that device (since 1.5.5). If they differ, or the decoder stops answering, that video is read the careful way
   (seeking, slower) and a short message says so. The export option **Fast rendering** switches the fast way off
