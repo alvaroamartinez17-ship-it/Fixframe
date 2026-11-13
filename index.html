@@ -808,7 +808,7 @@ button { cursor: pointer; -webkit-user-select: none; user-select: none; }
 <script>
 'use strict';
 /* Fixframe — turn a repair video into a step-by-step guide. Videos and project data are processed locally in the browser. */
-const APP_VERSION = '1.5.4';
+const APP_VERSION = '1.5.5';
 const PRIVACY_TEXT = "Your videos and project data are processed locally in this browser. Fixframe does not upload them to its server. Files leave the app only when you choose to save, download, export or share them."; // from src/privacy.txt
 const EDIT_FILE_TEXT = 'It does not contain the full video. It contains project information and a small preview image for each source video.';
 const IS_FRAMED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
@@ -3038,12 +3038,27 @@ const FrameReader = (() => {
       this.hasDequeue = 'ondequeue' in this.dec;
       if (this.hasDequeue) this.dec.ondequeue = () => this.poke();
     }
-    poke() { const w = this.wake; this.wake = null; if (w) w(); }
+    poke() { const w = this.wake; this.wake = null; clearTimeout(this.stallTimer); if (w) w(); }
+    /* Waits for the decoder. A decoder that stays silent for 10 s counts as stuck: the export then uses the <video> element. */
     waitEvent() {
       return new Promise((r) => {
         this.wake = r;
-        if (!this.hasDequeue) yieldNow().then(() => this.poke()); // browsers without the dequeue event
+        clearTimeout(this.stallTimer);
+        this.stallTimer = setTimeout(() => { if (!this.err) this.err = new Error('The video decoder stopped answering'); this.poke(); }, 10000);
+        if (!this.hasDequeue) yieldNow().then(() => { if (this.wake === r) this.poke(); }); // browsers without the dequeue event
       });
+    }
+    async flushAll() {
+      let timer = 0;
+      const stuck = new Promise((r, rej) => { timer = setTimeout(() => rej(new Error('The video decoder did not finish')), 15000); });
+      try { await Promise.race([this.dec.flush(), stuck]); } finally { clearTimeout(timer); }
+    }
+    /* Middle of the frame that is on screen at time t (a time at which every decoder must show the same frame). */
+    midFrame(t) {
+      let best = null;
+      for (const s of this.tr.samples) if (s.pts <= t + 1e-4 && (!best || s.pts > best.pts)) best = s;
+      if (!best) return t;
+      return best.pts + Math.min(best.d || 0.04, 0.2) / 2;
     }
     keyBefore(t) {
       const S = this.tr.samples;
@@ -3079,6 +3094,7 @@ const FrameReader = (() => {
         if (k > this.feedAt) this.restart(k);
       }
       for (;;) {
+        if (this.closed) throw new Error('Reader closed');
         if (this.err) throw this.err;
         while (this.frames.length && this.frames[0].timestamp <= tu) {
           if (this.cur) this.cur.close();
@@ -3089,7 +3105,7 @@ const FrameReader = (() => {
           if (this.dec.decodeQueueSize < 6) await this.feedOne();
           else await this.waitEvent();
         } else {
-          await this.dec.flush();
+          await this.flushAll();
           this.finished = true;
         }
       }
@@ -3117,6 +3133,8 @@ const FrameReader = (() => {
       };
     }
     close() {
+      this.closed = true;
+      clearTimeout(this.stallTimer);
       this.frames.forEach((f) => f.close());
       this.frames = [];
       if (this.cur) { this.cur.close(); this.cur = null; }
@@ -4295,6 +4313,8 @@ function outputSize(srcW, srcH, aspect, short) {
 }
 
 const isVideoSeg = (s) => s.kind === 'clip' || s.kind === 'ext';
+/* Which videos may use the fast frame reader on this device (checked once per video and session). */
+const FastFrames = { verified: new Map(), note: '', used: 0 };
 function countFrames(segs, total, fps, gif) {
   if (!gif) return Math.max(1, Math.round(total * fps));
   return segs.reduce((a, s) => a + (isVideoSeg(s) ? Math.max(1, Math.round(s.dur * fps)) : 1), 0);
@@ -4322,29 +4342,67 @@ async function renderTimeline({ P, segs, total, nSteps, W, H, fps, gif, sink, op
     return cur;
   };
   // Fast path: decode the clip's file in order with WebCodecs (one reader at a time, like the decoders above).
+  // It is used for a video only after its pictures were compared with the <video> element on this device
+  // (FastFrames.verified): a decoder that gives black, wrong or no pictures sends the export the careful way.
   let reader = null;
   let readerUrl = '';
-  const noReader = new Set();
-  const getReader = async (u) => {
+  const fastOff = (u, why) => {
+    FastFrames.verified.set(u, false);
+    FastFrames.note = why;
+    if (reader && readerUrl === u) { reader.close(); reader = null; }
+    if (window.__ffLog) window.__ffLog('fast frames off: ' + why);
+  };
+  const sameAsVideo = async (r, seg, t) => {
+    const v = await getVideo(seg);
+    const f = await r.frameAt(t);
+    await seekTo(v, t);
+    if (!v.videoWidth || !f.videoWidth) return 'no picture';
+    if (Math.abs(f.videoWidth / f.videoHeight - v.videoWidth / v.videoHeight) > 0.03) return 'shape differs';
+    const N = 48;
+    const ca = makeCanvas(N, N);
+    const cb = makeCanvas(N, N);
+    const xa = ca.getContext('2d', { alpha: false, willReadFrequently: true });
+    const xb = cb.getContext('2d', { alpha: false, willReadFrequently: true });
+    f.drawTo(xa, 0, 0, N, N);
+    xb.drawImage(v, 0, 0, N, N);
+    const A = xa.getImageData(0, 0, N, N).data;
+    const B = xb.getImageData(0, 0, N, N).data;
+    freeCanvas(ca);
+    freeCanvas(cb);
+    let sum = 0;
+    for (let i = 0; i < A.length; i += 4) sum += Math.abs(A[i] - B[i]) + Math.abs(A[i + 1] - B[i + 1]) + Math.abs(A[i + 2] - B[i + 2]);
+    const diff = sum / (N * N * 3);
+    return diff > 28 ? `pictures differ (${Math.round(diff)})` : '';
+  };
+  const getReader = async (seg, st) => {
+    const u = seg.url;
+    if (!baseOpts.fast || window.__ffNoFastFrames || FastFrames.verified.get(u) === false) return null;
     if (u === readerUrl) return reader;
     if (reader) { reader.close(); reader = null; }
     readerUrl = u;
-    if (noReader.has(u)) return null;
     try {
       const blob = await (await fetch(u)).blob();
       reader = await FrameReader.open(blob);
     } catch (e) { reader = null; }
-    if (!reader) noReader.add(u);
+    if (!reader) { FastFrames.verified.set(u, false); return null; }
+    if (!FastFrames.verified.get(u)) {
+      let bad = '';
+      try {
+        const end = isFinite(seg.end) ? seg.end : st + 1;
+        bad = await sameAsVideo(reader, seg, reader.midFrame(Math.min(st + 0.7, Math.max(st, end - 0.1))));
+        if (!bad) bad = await sameAsVideo(reader, seg, reader.midFrame(st));
+      } catch (e) { bad = (e && e.message) || 'decoder error'; }
+      if (window.__ffFastTest) bad = window.__ffFastTest(u, bad) || '';
+      if (bad) { fastOff(u, bad); return null; }
+      FastFrames.verified.set(u, true);
+    }
     return reader;
   };
   /* The picture of a clip at source time st: from the reader, or by seeking the <video> element. */
   const clipFrame = async (seg, st) => {
-    const r = await getReader(seg.url);
+    const r = await getReader(seg, st);
     if (r) {
-      try { return await r.frameAt(st); } catch (e) {
-        r.close(); reader = null; noReader.add(seg.url); readerUrl = '';
-        if (window.__ffLog) window.__ffLog('fast frames off: ' + (e && e.message));
-      }
+      try { FastFrames.used++; return await r.frameAt(st); } catch (e) { fastOff(seg.url, (e && e.message) || 'decoder error'); }
     }
     const v = await getVideo(seg);
     await seekTo(v, st);
@@ -7760,11 +7818,11 @@ const FORMATS = [
 ];
 const EX_DEFAULTS = {
   fmt: 'mp4',
-  mp4: { res: '720', aspect: 'source', fps: '30', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', fades: true, brandIntro: true, safety: true, brandOutro: true, watermark: true },
-  gif: { width: '480', fps: '10', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', brandIntro: false, safety: true, brandOutro: false, watermark: true },
+  mp4: { res: '720', aspect: 'source', fps: '30', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', fades: true, brandIntro: true, safety: true, brandOutro: true, watermark: true, fast: true },
+  gif: { width: '480', fps: '10', intro: true, stepCards: true, captions: true, pictures: true, picDur: '3', brandIntro: false, safety: true, brandOutro: false, watermark: true, fast: true },
   pdf: { paper: 'a4', autoPictures: true, safety: true, watermark: true },
   docx: { paper: 'a4', autoPictures: true, safety: true, watermark: true },
-  html: { clips: true, autoPictures: true, safety: true, watermark: true },
+  html: { clips: true, autoPictures: true, safety: true, watermark: true, fast: true },
 };
 const EX_SCHEMA = {
   mp4: [
@@ -7781,6 +7839,7 @@ const EX_SCHEMA = {
     { k: 'safety', label: 'Safety instructions', need: 'safety' },
     { k: 'brandOutro', label: 'Closing', need: 'outro' },
     { k: 'watermark', label: 'Logo watermark', need: 'logo' },
+    { k: 'fast', label: 'Fast rendering' },
   ],
   gif: [
     { k: 'width', label: 'Width', seg: [['320', '320'], ['480', '480'], ['640', '640']] },
@@ -7794,6 +7853,7 @@ const EX_SCHEMA = {
     { k: 'safety', label: 'Safety instructions', need: 'safety' },
     { k: 'brandOutro', label: 'Closing', need: 'outro' },
     { k: 'watermark', label: 'Logo watermark', need: 'logo' },
+    { k: 'fast', label: 'Fast rendering' },
   ],
   pdf: [
     { k: 'paper', label: 'Paper', seg: [['a4', 'A4'], ['letter', 'Letter']] },
@@ -7989,6 +8049,9 @@ const Exporter = {
     await Brand.prepareClips();
     const wm = !!o.watermark && Brand.has('logo');
     this.wm = wm;
+    this.fast = o.fast !== false;
+    FastFrames.note = '';
+    FastFrames.used = 0;
     let wake = null;
     try { if (navigator.wakeLock && navigator.wakeLock.request) wake = await navigator.wakeLock.request('screen'); } catch (e) { /* optional */ }
     try {
@@ -8010,7 +8073,7 @@ const Exporter = {
         }
         blob = await renderTimeline({
           P: E.P, segs, total, nSteps, W, H, fps, gif, sink,
-          opts: { captions: o.captions, fades: !gif && o.fades, watermark: wm },
+          opts: { captions: o.captions, fades: !gif && o.fades, watermark: wm, fast: o.fast !== false },
           onProgress: this.progressFn(gif ? 'Making GIF…' : 'Rendering video…', 'Frame'),
           signal,
         });
@@ -8030,6 +8093,7 @@ const Exporter = {
       if (Access.isVideo(fmt)) await Access.countVideoExport();
       if (this.pendingClose) { this.close(); return; }
       this.showResult(blob, safeFileName(E.P.title, ext), fmt);
+      if (FastFrames.note) toast('Fast rendering did not give the right pictures for a video on this device, so Fixframe read it the careful way. That takes longer.', '', 9000);
     } catch (e) {
       this.running = false;
       if (e && e.name === 'AbortError') {
@@ -8061,7 +8125,7 @@ const Exporter = {
       seg.t1 = seg.dur;
       clips.push(await renderTimeline({
         P: E.P, segs: [seg], total: seg.dur, nSteps: steps.length, W, H, fps, gif: false, sink: pick.sink,
-        opts: { captions: false, badge: true, fades: false, watermark: this.wm },
+        opts: { captions: false, badge: true, fades: false, watermark: this.wm, fast: this.fast },
         onProgress: this.progressFn(`Rendering clip ${i + 1} of ${steps.length}…`, 'Frame'),
         signal,
       }));
